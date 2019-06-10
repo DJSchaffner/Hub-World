@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Placeholder : MonoBehaviour
+public class BuildingController : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -13,6 +13,11 @@ public class Placeholder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Hello there");
+        
+    }
+
+    public void InteractWith()
+    {
+        Debug.Log("I'm opening my Menues!!");
     }
 }
