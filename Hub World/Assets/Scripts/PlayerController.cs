@@ -4,13 +4,49 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public int CamSpeed;
-    public int ZoomSpeed;
+    private const int MAX_ZOOM_OUT = 8;
+    private const int MAX_ZOOM_IN = 4;
+    private const int CAM_SPEED = 2;
+    private const int ZOOM_SPEED = 2;
+    private const int DEFAULT_ZOOM = 5;
+
+    private Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
- 
+        cam = GetComponent<Camera>();
+        cam.orthographicSize = DEFAULT_ZOOM;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        InputHandling();
+    }
+
+    /**
+     * Wird in der Update-Funktion jeden Frame aufgerufen.
+     * Verarbeitet sämtlichen Spieler-Input.
+     **/
+    private void InputHandling()
+    {
+        transform.Translate(Input.GetAxis("Horizontal") * CAM_SPEED * Time.deltaTime, Input.GetAxis("Vertical") * CAM_SPEED * Time.deltaTime, 0);
+
+        //Wenn der linke Maus-Button geklickt wurde
+        if (Input.GetMouseButtonDown(0))
+        {
+            OnClick();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") != 0f)
+        {
+            float scrollVal = Input.GetAxis("Mouse ScrollWheel") * ZOOM_SPEED;
+            //Wenn die Cam-Size sich in seinen Bereichsgrenzen befindet, kann sie sich größer oder kleiner ziehen(zoomen)
+            if (cam.orthographicSize - scrollVal < MAX_ZOOM_OUT && cam.orthographicSize - scrollVal > MAX_ZOOM_IN)
+            {
+                cam.orthographicSize -= scrollVal;
+            }
+        }
     }
 
     /**
@@ -22,7 +58,7 @@ public class PlayerController : MonoBehaviour
      * Falls das Objekt den Tag "interactable" besitzt und einen collider
      * wird es als Gebäude behandelt, da diese ausschließlich diese Eigenschaften besitzen.
      **/
-    void OnClick()
+    private void OnClick()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
@@ -34,21 +70,10 @@ public class PlayerController : MonoBehaviour
             Debug.Log(hit.transform.gameObject.ToString());
             Debug.Log("was clicked!");
 
+            //Holen der Building-Controller Componente, welche jedes Gebäude besitzt
             BuildingController building = hit.transform.GetComponent<BuildingController>();
+            //Gebäude-Spezifische Logik ausführen
             building.InteractWith();
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Zoom muss durch resizen aller Gameobjekte realisiert werden
-        //transform.Translate(0, 0, Input.GetAxis("Mouse ScrollWheel") * ZoomSpeed * Time.deltaTime); 
-        transform.Translate(Input.GetAxis("Horizontal") * CamSpeed * Time.deltaTime, Input.GetAxis("Vertical") * CamSpeed * Time.deltaTime, 0);
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            OnClick();
         }
     }
 }
