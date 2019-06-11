@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
         //Wenn der linke Maus-Button geklickt wurde
         if (Input.GetMouseButtonDown(0))
         {
-            OnClick();
+            //OnClick();
         }
         else if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
      * Falls das Objekt den Tag "interactable" besitzt und einen collider
      * wird es als Gebäude behandelt, da diese ausschließlich diese Eigenschaften besitzen.
      **/
+     /*
     private void OnClick()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -75,5 +76,5 @@ public class PlayerController : MonoBehaviour
             //Gebäude-Spezifische Logik ausführen
             building.InteractWith();
         }
-    }
+    }*/
 }
