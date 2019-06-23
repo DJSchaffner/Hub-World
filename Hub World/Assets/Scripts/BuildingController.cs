@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BuildingController : MonoBehaviour
 {
+
     private SpriteRenderer render;
 
     // Start is called before the first frame update

@@ -1,14 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Map;
 
 public class PlayerController : MonoBehaviour
 {
-    private const int MAX_ZOOM_OUT = 8;
-    private const int MAX_ZOOM_IN = 4;
-    private const int CAM_SPEED = 2;
-    private const int ZOOM_SPEED = 2;
-    private const int DEFAULT_ZOOM = 5;
+    private const int MAX_ZOOM_OUT = 50;
+    private const int MAX_ZOOM_IN = 10;
+    private const int CAM_SPEED = 20;
+    private const int ZOOM_SPEED = 10;
+    private const int DEFAULT_ZOOM = 15;
+
+    public GameObject MapObject;
+    public GameObject Tavern;
+
+    private MapController map;
+    private bool isPlacing = false;
 
     private Camera cam;
 
@@ -17,6 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         cam.orthographicSize = DEFAULT_ZOOM;
+
+        map = MapObject.GetComponent<MapController>();
     }
 
     // Update is called once per frame
@@ -33,10 +42,17 @@ public class PlayerController : MonoBehaviour
     {
         transform.Translate(Input.GetAxis("Horizontal") * CAM_SPEED * Time.deltaTime, Input.GetAxis("Vertical") * CAM_SPEED * Time.deltaTime, 0);
 
-        //Wenn der linke Maus-Button geklickt wurde
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isPlacing)
         {
-            //OnClick();
+            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            pos.z = 0;
+            Instantiate(Tavern, pos, Quaternion.identity);
+            map.PlaceObject((int)pos.x, (int)pos.y, Tavern.GetComponent<BoxCollider2D>().size);
+            isPlacing = false;
+        }
+        else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
+        {
+            isPlacing = true;
         }
         else if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
@@ -48,33 +64,4 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    /**
-     * Wird aufgerufen wenn der linke Mausbutton geclickt wurde.
-     * Erzeugt einen Ray von der relativen Mausposition aus.
-     * Das von dem Ray als erstes erreichte Objekt in der Szene
-     * wird auf seine Eigenschaften überprüft.
-     * 
-     * Falls das Objekt den Tag "interactable" besitzt und einen collider
-     * wird es als Gebäude behandelt, da diese ausschließlich diese Eigenschaften besitzen.
-     **/
-     /*
-    private void OnClick()
-    {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-        RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-
-        //Wenn das angeklickte Object den Tag interactable und einen Collider besitzt 
-        if (hit.collider != null && hit.transform.tag == "interactable")
-        {
-            Debug.Log(hit.transform.gameObject.ToString());
-            Debug.Log("was clicked!");
-
-            //Holen der Building-Controller Componente, welche jedes Gebäude besitzt
-            BuildingController building = hit.transform.GetComponent<BuildingController>();
-            //Gebäude-Spezifische Logik ausführen
-            building.InteractWith();
-        }
-    }*/
 }
