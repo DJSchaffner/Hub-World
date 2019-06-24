@@ -46,8 +46,10 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             pos.z = 0;
-            Instantiate(Tavern, pos, Quaternion.identity);
-            map.PlaceObject((int)pos.x, (int)pos.y, Tavern.GetComponent<BoxCollider2D>().size);
+            GameObject newBuilding = Instantiate(Tavern, pos, Quaternion.identity);
+            newBuilding.SetActive(true);
+            
+            map.PlaceObject((int)pos.x, (int)pos.y, newBuilding.GetComponent<PolygonCollider2D>());
             isPlacing = false;
         }
         else if (!isPlacing && Input.GetKeyDown(KeyCode.B))

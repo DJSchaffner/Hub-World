@@ -38,16 +38,19 @@ namespace Map{
             }
         }
 
-        public void PlaceObject(int xCenter, int yCenter, Vector2 size)
+        public void PlaceObject(int xCenter, int yCenter, PolygonCollider2D placedObject)
         {
-            float sizeX = size.x / 2;
-            float sizeY = size.y / 2;
+            float sizeX = placedObject.bounds.extents.x;
+            float sizeY = placedObject.bounds.extents.y;
 
             for (int y = (int)(yCenter - sizeY); y < (yCenter + sizeY); y++)
             {
                 for (int x = (int)(xCenter - sizeX); x < (xCenter + sizeX); x++)
                 {
-                    map[0].SetTile(new Vector3Int(x, y, 0), blockedTile);
+                    if (placedObject.bounds.Contains(map[0].GetCellCenterWorld(new Vector3Int(x, y, 0))))
+                    {
+                        map[0].SetTile(new Vector3Int(x, y, 0), blockedTile);
+                    }
                 }
             }
         }
