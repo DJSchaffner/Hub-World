@@ -83,9 +83,6 @@ namespace Map{
                                         //Gibt die nächste Position zwischen aktuellem Punkt und nächstem Punkt, abhängig von (k)
                                         Vector2 lerp = Vector2.Lerp(pathPoint, placedObject.GetPath(i)[j + 1], k);
                                         Vector2 worldLerp = placedObject.transform.TransformPoint(lerp);
-
-                                        //Berechnet die Distanz zwischen aktuellem Punkt und neu berechneter Position
-                                        //int pointDist = (int)Vector2.Distance(point, worldLerp);
                                         
                                         //Berechnet den Richtungs-Vektor zwischen dem aktuellen Punkt und der neuen Position
                                         Vector2 newPointDirection = worldLerp - point;
@@ -137,5 +134,22 @@ namespace Map{
             }
         }
 
+
+        public void PlaceObject(int xCenter, int yCenter, bool[,] tileArray)
+        {
+            float sizeX = tileArray.GetLength(0) / 2;
+            float sizeY = tileArray.GetLength(1) / 2;
+
+            for (int y = 0; y < sizeY ; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    if (tileArray[x, y])
+                    {
+                        map[0].SetTile(new Vector3Int((int)(xCenter - sizeX) + x, (int)(yCenter - sizeY) + y, 0), blockedTile);
+                    }
+                }
+            }
+        }
     }
 }

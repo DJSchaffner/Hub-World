@@ -96,3 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb599344bbb725140baef17f45e861eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapObject: {fileID: 0}
+  Tavern: {fileID: 4513704618812038188, guid: 312387c819e4d034e958426717400c06, type: 3}
+  GameControl: {fileID: 0}

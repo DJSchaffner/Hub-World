@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject MapObject;
     public GameObject Tavern;
+    public GameController GameControl;
 
-    GameObject newBuilding;
     Vector3 placingPos;
     private MapController map;
     private bool isPlacing = false;
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && isPlacing)
         {
-            map.PlaceObject((int)placingPos.x, (int)placingPos.y, newBuilding.GetComponent<PolygonCollider2D>());
+            map.PlaceObject((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea);
             isPlacing = false;
         }
         else if (isPlacing)
@@ -65,15 +65,15 @@ public class PlayerController : MonoBehaviour
             placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             placingPos.z = 0;
 
-            newBuilding.transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
+            GameControl.Buildings[0].transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
         }
         else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
         {
             isPlacing = true;
             placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             placingPos.z = 0;
-            newBuilding = Instantiate(Tavern, placingPos, Quaternion.identity);
-            newBuilding.SetActive(true);
+            GameControl.Buildings[0].gameObject.SetActive(true);
+            GameControl.Buildings[0].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }
