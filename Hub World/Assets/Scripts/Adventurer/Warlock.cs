@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Warlock : Mage
 {
-
+    public Warlock() {
+        super(Food.Meat, Drink.Booze, Race.Human);
+    }
 }

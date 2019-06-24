@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Healer : Adventurer
 {
-
+    public Healer() {
+        super(Food.Cake, Drink.Wine, Race.Elf);
+    }
 }

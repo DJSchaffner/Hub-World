@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Paladin : Tank
 {
-
+    public Paladin() {
+        super(Food.Meat, Drink.Beer, Race.Dwarf);
+    }
 }

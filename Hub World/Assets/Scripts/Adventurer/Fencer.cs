@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Fencer : SwordFighter
 {
-
+    public Fencer() {
+      super(Food.Bread, Drink.Beer, Race.Human);
+    }
 }

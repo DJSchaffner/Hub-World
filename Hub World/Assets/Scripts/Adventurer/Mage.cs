@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class Mage : Adventurer
 {
-
+    public Mage() {
+        super(Food.Bread, Drink.Wine, Race.Human);
+    }
 }

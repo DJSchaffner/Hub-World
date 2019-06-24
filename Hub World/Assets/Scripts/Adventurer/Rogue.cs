@@ -4,4 +4,7 @@ using UnityEngine;
 
 public class Rogue : SwordFighter
 {
+    public Rogue() {
+        super(Food.Bread, Drink.Beer, Race.Human);
+    }
 }
