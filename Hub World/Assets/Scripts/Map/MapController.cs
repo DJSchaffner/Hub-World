@@ -40,6 +40,7 @@ namespace Map{
             }
         }
 
+
         public void PlaceObject(int xCenter, int yCenter, PolygonCollider2D placedObject)
         {
             float sizeX = placedObject.bounds.extents.x;
@@ -77,7 +78,7 @@ namespace Map{
                                     float distance = Vector2.Distance(pathPoint, placedObject.GetPath(i)[j + 1]);
 
                                     //Abhängig von dieser wird (distance) mal die Position für eine Zelle zwischen beiden Punkten ermittelt
-                                    for (float k = 1/distance; k < 1; k += 1/distance)
+                                    for (float k = 1/distance; k <= 1; k += 1/distance)
                                     {
                                         //Gibt die nächste Position zwischen aktuellem Punkt und nächstem Punkt, abhängig von (k)
                                         Vector2 lerp = Vector2.Lerp(pathPoint, placedObject.GetPath(i)[j + 1], k);

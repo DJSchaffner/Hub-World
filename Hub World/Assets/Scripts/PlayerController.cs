@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public GameObject MapObject;
     public GameObject Tavern;
 
+    GameObject newBuilding;
+    Vector3 placingPos;
     private MapController map;
     private bool isPlacing = false;
 
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
         cam.orthographicSize = DEFAULT_ZOOM;
 
         map = MapObject.GetComponent<MapController>();
+        placingPos = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -42,21 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         transform.Translate(Input.GetAxis("Horizontal") * CAM_SPEED * Time.deltaTime, Input.GetAxis("Vertical") * CAM_SPEED * Time.deltaTime, 0);
 
-        if (Input.GetMouseButtonDown(0) && isPlacing)
-        {
-            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            pos.z = 0;
-            GameObject newBuilding = Instantiate(Tavern, pos, Quaternion.identity);
-            newBuilding.SetActive(true);
-            
-            map.PlaceObject((int)pos.x, (int)pos.y, newBuilding.GetComponent<PolygonCollider2D>());
-            isPlacing = false;
-        }
-        else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
-        {
-            isPlacing = true;
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") != 0f)
+        if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
             float scrollVal = Input.GetAxis("Mouse ScrollWheel") * ZOOM_SPEED;
             //Wenn die Cam-Size sich in seinen Bereichsgrenzen befindet, kann sie sich größer oder kleiner ziehen(zoomen)
@@ -64,6 +53,27 @@ public class PlayerController : MonoBehaviour
             {
                 cam.orthographicSize -= scrollVal;
             }
+        }
+
+        if (Input.GetMouseButtonDown(0) && isPlacing)
+        {
+            map.PlaceObject((int)placingPos.x, (int)placingPos.y, newBuilding.GetComponent<PolygonCollider2D>());
+            isPlacing = false;
+        }
+        else if (isPlacing)
+        {
+            placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            placingPos.z = 0;
+
+            newBuilding.transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
+        }
+        else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
+        {
+            isPlacing = true;
+            placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            placingPos.z = 0;
+            newBuilding = Instantiate(Tavern, placingPos, Quaternion.identity);
+            newBuilding.SetActive(true);
         }
     }
 }
