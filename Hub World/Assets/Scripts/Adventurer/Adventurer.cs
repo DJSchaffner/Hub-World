@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * Abenteurer
+ */
 public class Adventurer
 {
-    //Zufriedenheit (<25% debuff >75% buff)
+    //Zufriedenheit
     private int wellBeing = 50;
     //Bevorzugte Nahrung
     private Food food;
@@ -23,13 +26,12 @@ public class Adventurer
     //Wie oft wurde das Luxusgut gekauft
     private int amountOfGear = 0;
     //Rüstung
-    private Armor armor = None;
+    private Armor armor = Armor.None;
     //Waffe
-    private Weapon weapon = None;
+    private Weapon weapon = Weapon.None;
     //Währung
     private int coins = 50;
-    //TODO: weitere Güter (z.B. Heiltränke), so nicht ideal -> Map<Gear, int>? 
-    private List<Gear> obstacleGear = new LinkedList<>();
+    private Dictionary<Gear, int> otherGear = new Dictionary<Gear, int>();
     
     /**
      * Standardkonstruktor
@@ -80,8 +82,9 @@ public class Adventurer
             case AdventurerClass.Warlock:
               wantedGear = Gear.Incense;
               break;
-            default:
+            case AdventurerClass.None:
                wantedGear = Gear.Torch;
+               break;
         }
     }
 
@@ -99,15 +102,23 @@ public class Adventurer
      * Verändert den Zufriedenheitswert, achtet auf einen Bereich zwischen 0 und 100
      * @param percent Zahl, um die der Zufriedenheitswert verändert wird
      */
-    private addWellBeing(int percent) {
+    private void addWellBeing(int percent) {
         wellBeing = checkRange(wellBeing + percent);
     }
 
-    private addFoodPercent(int percent) {
+    /**
+     * Verändert den Nahrungswert, achtet auf einen Bereich zwischen 0 und 100
+     * @param percent Zahl, um die der Nahrungswert verändert wird
+     */
+    private void addFoodPercent(int percent) {
         foodPercent = checkRange(foodPercent + percent);
     }
 
-    private addDrinkPercent(int percent) {
+    /**
+     * Verändert den durstwert, achtet auf einen Bereich zwischen 0 und 100
+     * @param percent Zahl, um die der Durstwert verändert wird
+     */
+    private void addDrinkPercent(int percent) {
         drinkPercent = checkRange(drinkPercent + percent);
     }
 
@@ -161,7 +172,7 @@ public class Adventurer
      public void buyGear(Gear gear) {
          //Händler des Guts finden + hingehen
          //if (coins >= Gutspreis) {
-             this.obstacleGear.Add(gear);
+             this.otherGear[gear]++;
          //}
          //Random herumlaufen
      }
