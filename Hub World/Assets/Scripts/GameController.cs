@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum BuildingTypes { Tavern = 0, Smith }
+
 public class GameController : MonoBehaviour
 {
     public static float TILE_SIZE;
@@ -10,7 +12,7 @@ public class GameController : MonoBehaviour
     public GameObject BuildingObj;
     public Sprite[] BuildingTypes;
 
-    public List<BuildingController> Buildings;
+    public List<BuildingController> Buildings { get; set; }
 
     private Grid grid;
 
@@ -24,10 +26,11 @@ public class GameController : MonoBehaviour
 
     private void InitBuildings()
     {
+        Buildings = new List<BuildingController>();
         foreach (Sprite buildingSp in BuildingTypes)
         {
             BuildingController bCont = Instantiate(BuildingObj).GetComponent<BuildingController>();
-            bCont.SetSprite(buildingSp);
+            bCont.SetBuildingType(buildingSp);
             bCont.gameObject.SetActive(false);
             Buildings.Add(bCont);
         }

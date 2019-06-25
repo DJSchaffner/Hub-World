@@ -58,10 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 299dc8b998b685449a62ebc01c851068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GrassTile: {fileID: 4350751937675157882, guid: 9b196f72a8e7e30409d44297d51e8690,
-    type: 3}
-  BlockedTile: {fileID: 7631106434277351039, guid: 860602af9cbb13f4eb745a6958a1cc72,
-    type: 3}
+  Tiles:
+  - {fileID: 7631106434277351039, guid: 860602af9cbb13f4eb745a6958a1cc72, type: 3}
+  - {fileID: 4350751937675157882, guid: 9b196f72a8e7e30409d44297d51e8690, type: 3}
 --- !u!1 &2212981039727298653
 GameObject:
   m_ObjectHideFlags: 0

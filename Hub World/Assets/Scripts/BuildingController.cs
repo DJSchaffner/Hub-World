@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BuildingController : MonoBehaviour
 {
-    public bool[,] BuildArea;
+    public bool[,] BuildArea { get; set; }
 
     private PolygonCollider2D polCollider;
     private SpriteRenderer render;
@@ -13,13 +13,6 @@ public class BuildingController : MonoBehaviour
     void Awake()
     {
         render = GetComponent<SpriteRenderer>();
-        polCollider = GetComponent<PolygonCollider2D>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     // Wenn der linke Mausbutton auf diesem Object geklickt wurde
@@ -28,9 +21,14 @@ public class BuildingController : MonoBehaviour
         InteractWith();
     }
 
-    public void SetSprite(Sprite sprite)
+    public void SetBuildingType(Sprite sprite)
     {
         render.sprite = sprite;
+        if (polCollider != null)
+        {
+            Destroy(polCollider);
+        }
+        polCollider = gameObject.AddComponent<PolygonCollider2D>();
         BuildArea = DefineBuildingArea(polCollider);
     }
 
