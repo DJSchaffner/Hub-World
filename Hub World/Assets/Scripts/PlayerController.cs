@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     private const int DEFAULT_ZOOM = 15;
 
     public GameObject MapObject;
-    public GameObject Tavern;
     public GameController GameControl;
 
     Vector3 placingPos;
@@ -55,6 +54,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        HandleBuildingInput();
+    }
+
+    private void HandleBuildingInput()
+    {
         if (Input.GetMouseButtonDown(0) && isPlacing)
         {
             map.PlaceObject((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea);

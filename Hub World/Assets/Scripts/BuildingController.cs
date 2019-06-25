@@ -5,15 +5,15 @@ using UnityEngine;
 public class BuildingController : MonoBehaviour
 {
     public bool[,] BuildArea;
-    public PolygonCollider2D PolCollider;
 
+    private PolygonCollider2D polCollider;
     private SpriteRenderer render;
 
     // Start is called before the first frame update
     void Awake()
     {
         render = GetComponent<SpriteRenderer>();
-        PolCollider = GetComponent<PolygonCollider2D>();
+        polCollider = GetComponent<PolygonCollider2D>();
     }
 
     // Update is called once per frame
@@ -31,7 +31,7 @@ public class BuildingController : MonoBehaviour
     public void SetSprite(Sprite sprite)
     {
         render.sprite = sprite;
-        BuildArea = DefineBuildingArea(PolCollider);
+        BuildArea = DefineBuildingArea(polCollider);
     }
 
     private void InteractWith()
@@ -41,17 +41,20 @@ public class BuildingController : MonoBehaviour
 
     private bool[,] DefineBuildingArea(PolygonCollider2D placedObject)
     {
-        float sizeX = placedObject.bounds.extents.x;
-        float sizeY = placedObject.bounds.extents.y;
-        bool[,] tileMap = new bool[(int)sizeX, (int)sizeY];
+        float sizeX = placedObject.bounds.size.x;
+        float sizeY = placedObject.bounds.size.y;
+        bool[,] tileMap = new bool[(int)sizeX +1, (int)sizeY + 1];
 
         float offset = GameController.TILE_SIZE / 2;
         Vector3 position = transform.position;
 
+        int indexOffsetX = (int)(position.x - sizeX/2);
+        int indexOffsetY = (int)(position.y - sizeY/2);
+
         //Geht über die Koordinaten im Grid, welche innerhalb der Bounds des zu platzierenden Objekts sind 
-        for (int y = (int)(position.y - sizeY); y < (position.y + sizeY); y++)
+        for (int y = indexOffsetY; y < (position.y + sizeY/2); y++)
         {
-            for (int x = (int)(position.x - sizeX); x < (position.x + sizeX); x++)
+            for (int x = indexOffsetX; x < (position.x + sizeX/2); x++)
             {
                 //Aktuelle Grid-Position
                 Vector3Int cellPos = new Vector3Int(x, y, 0);
@@ -72,7 +75,7 @@ public class BuildingController : MonoBehaviour
                         {
                             //Wird dort ein neues Blocker-Tile hingesetzt
                             //FUNZT NICHT! Muss noch zwei lauf variablen mitziehen
-                            tileMap[x, y] = true;
+                            setTile(x, y, indexOffsetX, indexOffsetY, tileMap);
 
                             //Ist die Distanz zum nächsten Punkt des derzeit betrachteten Paths größer als zwei Grid-Zellen
                             if (j + 1 < placedObject.GetPath(i).Length && Vector2.Distance(pathPoint, placedObject.GetPath(i)[j + 1]) >= GameController.TILE_SIZE)
@@ -106,19 +109,18 @@ public class BuildingController : MonoBehaviour
                                         vagueCellPos.y = (int)vagueCellPos.y;
                                         roundedCellY.y = (int)vagueCellPos.y + yOffset;
                                         roundedCellY.x = (int)vagueCellPos.x;
-                                        tileMap[roundedCellY.x, roundedCellY.y] = true;
-
+                                        setTile(roundedCellY.x, roundedCellY.y, indexOffsetX, indexOffsetY, tileMap);
                                     }
                                     if (vagueCellPos.x % 1 != 0)
                                     {
                                         vagueCellPos.x = (int)vagueCellPos.x;
                                         roundedCellX.x = (int)vagueCellPos.x + xOffset;
                                         roundedCellX.y = (int)vagueCellPos.y;
-                                        tileMap[roundedCellX.x, roundedCellX.y] = true;
+                                        setTile(roundedCellX.x, roundedCellX.y, indexOffsetX, indexOffsetY, tileMap);
                                     }
 
                                     Vector3Int pathCellPos = new Vector3Int((int)vagueCellPos.x, (int)vagueCellPos.y, 0);
-                                    tileMap[pathCellPos.x, pathCellPos.y] = true;
+                                    setTile(pathCellPos.x, pathCellPos.y, indexOffsetX, indexOffsetY, tileMap);
                                 }
                             }
                         }
@@ -127,5 +129,30 @@ public class BuildingController : MonoBehaviour
             }
         }
         return tileMap;
+    }
+
+
+    private void setTile(int x, int y, int indexOffsetX, int indexOffsetY, bool[,] tileMap)
+    {
+        int indexX = x - indexOffsetX, indexY = y - indexOffsetY;
+        if(indexX < 0)
+        {
+            indexX = 0;
+        }
+        else if (indexX > tileMap.GetLength(0))
+        {
+            indexX = tileMap.GetLength(0);
+        }
+
+        if(indexY < 0)
+        {
+            indexY = 0;
+        }
+        else if (indexY > tileMap.GetLength(1))
+        {
+            indexY = tileMap.GetLength(1);
+        }
+
+        tileMap[indexX, indexY] = true;
     }
 }

@@ -137,8 +137,8 @@ namespace Map{
 
         public void PlaceObject(int xCenter, int yCenter, bool[,] tileArray)
         {
-            float sizeX = tileArray.GetLength(0) / 2;
-            float sizeY = tileArray.GetLength(1) / 2;
+            float sizeX = tileArray.GetLength(0);
+            float sizeY = tileArray.GetLength(1);
 
             for (int y = 0; y < sizeY ; y++)
             {
@@ -146,7 +146,7 @@ namespace Map{
                 {
                     if (tileArray[x, y])
                     {
-                        map[0].SetTile(new Vector3Int((int)(xCenter - sizeX) + x, (int)(yCenter - sizeY) + y, 0), blockedTile);
+                        map[0].SetTile(new Vector3Int((int)(xCenter - sizeX/2) + x, (int)(yCenter - sizeY/2) + y, 0), blockedTile);
                     }
                 }
             }
