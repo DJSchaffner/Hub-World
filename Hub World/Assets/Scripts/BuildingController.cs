@@ -30,6 +30,7 @@ public class BuildingController : MonoBehaviour
         }
         polCollider = gameObject.AddComponent<PolygonCollider2D>();
         BuildArea = DefineBuildingArea(polCollider);
+        BuildArea = FillBuildingArea(BuildArea);
     }
 
     private void InteractWith()
@@ -134,23 +135,44 @@ public class BuildingController : MonoBehaviour
     {
         int indexX = x - indexOffsetX, indexY = y - indexOffsetY;
         if(indexX < 0)
-        {
             indexX = 0;
-        }
         else if (indexX > tileMap.GetLength(0))
-        {
             indexX = tileMap.GetLength(0);
-        }
 
         if(indexY < 0)
-        {
             indexY = 0;
-        }
         else if (indexY > tileMap.GetLength(1))
-        {
             indexY = tileMap.GetLength(1);
-        }
 
         tileMap[indexX, indexY] = true;
+    }
+
+    private bool[,] FillBuildingArea(bool[,] tileMap)
+    {
+        bool fillLine;
+        int fillToX = 0, fillFromX = 0;
+
+        for (int y = 0; y < tileMap.GetLength(1); y++)
+        {
+            fillLine = false;
+            for (int x = 0; x < tileMap.GetLength(0); x++)
+            {
+                if (!fillLine && tileMap[x, y])
+                {
+                    fillLine = true;
+                    fillFromX = x;
+                }
+                else if (fillLine && tileMap[x, y])
+                {
+                    fillToX = x;
+                }
+            }
+
+            for (int x = fillFromX; x < fillToX; x++)
+            {
+                tileMap[x, y] = true;
+            }
+        }
+        return tileMap;
     }
 }

@@ -53,9 +53,11 @@ namespace Map{
                 {
                     if (tileArray[x, y])
                     {
+                        //TEMP!
                         map[0].SetTile(new Vector3Int((int)(xCenter - sizeX/2) + x, (int)(yCenter - sizeY/2) + y, 0), blockedTile);
+
                         MapTile currTile = (MapTile)map[0].GetTile(new Vector3Int((int)(xCenter - sizeX / 2) + x, (int)(yCenter - sizeY / 2) + y, 0));
-                        if (currTile != null && currTile.isBlocked)
+                        if (currTile != null)
                         {
                             currTile.isBlocked = true;
                         }
@@ -64,7 +66,7 @@ namespace Map{
             }
         }
 
-        public bool isPlacable(int xCenter, int yCenter, bool[,] tileArray)
+        public bool IsPlacable(int xCenter, int yCenter, bool[,] tileArray)
         {
             float sizeX = tileArray.GetLength(0);
             float sizeY = tileArray.GetLength(1);
@@ -74,9 +76,12 @@ namespace Map{
                 for (int x = 0; x < sizeX; x++)
                 {
                     MapTile currTile = (MapTile)map[0].GetTile(new Vector3Int((int)(xCenter - sizeX / 2) + x, (int)(yCenter - sizeY / 2) + y, 0));
-                    if (currTile != null && currTile.isBlocked)
+                    if (currTile != null && currTile.m_Prefab == Tiles[(int)TileTypes.BlockedTile])
                     {
-                        return false;
+                        if (currTile.isBlocked)
+                        {
+                            return false;
+                        }
                     }
                 }
             }

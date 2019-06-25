@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBuildingInput()
     {
-        if (Input.GetMouseButtonDown(0) && isPlacing && map.isPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea))
+        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea))
         {
             map.PlaceObject((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea);
             isPlacing = false;
