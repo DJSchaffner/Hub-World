@@ -31,7 +31,9 @@ public class Adventurer
     private Weapon weapon = Weapon.None;
     //Währung
     private int coins = 50;
+    //Sonstige Gegenstände (z.B. Heiltränke) 
     private Dictionary<Gear, int> otherGear = new Dictionary<Gear, int>();
+
     
     /**
      * Standardkonstruktor
@@ -172,13 +174,18 @@ public class Adventurer
      public void buyGear(Gear gear) {
          //Händler des Guts finden + hingehen
          //if (coins >= Gutspreis) {
-             this.otherGear[gear]++;
+            if(otherGear.ContainsKey(gear)) {
+                this.otherGear[gear]++;
+            } else {
+                otherGear.Add(gear, 1);
+            }
          //}
          //Random herumlaufen
      }
 
     /**
-     * 
+     * Nahrungsaufnahme
+     * @param food Nahrung
      */
      public void eatSomething(Food food) {
          //Nahrungshändler finden + hingehen
@@ -195,6 +202,10 @@ public class Adventurer
          //Random herumlaufen
      }
 
+    /**
+     * Trinken
+     * @param drink Getränk
+     */
      public void drinkSomething(Drink drink) {
          //Getränkehändler finden + hingehen
          //if (coins >= Getränkepreis) {
