@@ -48,3 +48,4 @@ MonoBehaviour:
     type: 3}
   BuildingTypes:
   - {fileID: 21300000, guid: 003d9add8557a6745913d3ef6ece5b9e, type: 3}
+  - {fileID: 21300000, guid: 914ef8099b7593141bc12f319f435db8, type: 3}

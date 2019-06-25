@@ -136,13 +136,13 @@ public class BuildingController : MonoBehaviour
         int indexX = x - indexOffsetX, indexY = y - indexOffsetY;
         if(indexX < 0)
             indexX = 0;
-        else if (indexX > tileMap.GetLength(0))
-            indexX = tileMap.GetLength(0);
+        else if (indexX >= tileMap.GetLength(0))
+            indexX = tileMap.GetLength(0)-1;
 
         if(indexY < 0)
             indexY = 0;
-        else if (indexY > tileMap.GetLength(1))
-            indexY = tileMap.GetLength(1);
+        else if (indexY >= tileMap.GetLength(1))
+            indexY = tileMap.GetLength(1)-1;
 
         tileMap[indexX, indexY] = true;
     }

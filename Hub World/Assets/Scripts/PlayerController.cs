@@ -59,9 +59,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBuildingInput()
     {
-        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea))
+        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea))
         {
-            map.PlaceObject((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[0].BuildArea);
+            map.PlaceObject((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea);
             isPlacing = false;
         }
         else if (isPlacing)
@@ -69,15 +69,15 @@ public class PlayerController : MonoBehaviour
             placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             placingPos.z = 0;
 
-            GameControl.Buildings[0].transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
+            GameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
         }
         else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
         {
             isPlacing = true;
             placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             placingPos.z = 0;
-            GameControl.Buildings[0].gameObject.SetActive(true);
-            GameControl.Buildings[0].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            GameControl.Buildings[(int)BuildingTypes.Tavern].gameObject.SetActive(true);
+            GameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }
