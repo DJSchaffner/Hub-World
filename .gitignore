@@ -34,3 +34,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Hub World/.vscode/launch.json
+Hub World/.vscode/settings.json
