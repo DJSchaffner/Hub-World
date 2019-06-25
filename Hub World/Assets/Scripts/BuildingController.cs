@@ -9,7 +9,7 @@ public class BuildingController : MonoBehaviour
     private PolygonCollider2D polCollider;
     private SpriteRenderer render;
 
-    // Start is called before the first frame update
+    // Awake is called before the first frame update and Start
     void Awake()
     {
         render = GetComponent<SpriteRenderer>();
