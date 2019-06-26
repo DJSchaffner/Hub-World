@@ -42,13 +42,14 @@ public class Adventurer : MonoBehaviour
     void Start()
     {
         pathFinding = new AStar();
+        hasPath = false;
     }
 
     void Update()
     {
         if (hasPath)
         {
-            Move();
+            //Move();
         }
     }
 
