@@ -41,6 +41,8 @@ namespace Pathfinding
                 result.Add(n.position);
             }
 
+            Utils.PrintList(result);
+
             return result;
         }
 
@@ -50,10 +52,12 @@ namespace Pathfinding
 
         private IEnumerable<Node> GetNeighbors(Graph graph, Vector3Int end, List<Node> list, Node current) {
             foreach (Vector3Int neighbor in NEIGHBORS) {
-                Node temp = new Node(current.position + neighbor, current, current.traveled + 1, graph.cells[current.position.y, current.position.x].heuristic);
+                if (graph.IsInbounds(current.position + neighbor) && !graph.GetCell(current.position + neighbor).blocked) {
+                    Node temp = new Node(current.position + neighbor, current, current.traveled + 1, graph.GetCell(current.position + neighbor).heuristic);
 
-                if (Utils.IsInbounds(graph, temp) && !list.HasNode(temp))
-                    yield return temp;
+                    if (!list.HasNode(temp))
+                        yield return temp;
+                }                
             }
         }
     }   
