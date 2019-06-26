@@ -25,6 +25,7 @@ namespace Map{
             grassTile.m_Prefab = Tiles[(int)TileTypes.GrassTile];
 
             blockedTile = ScriptableObject.CreateInstance<MapTile>();
+            blockedTile.isBlocked = true;
             blockedTile.m_Sprite = Tiles[(int)TileTypes.BlockedTile].GetComponent<SpriteRenderer>().sprite;
             blockedTile.m_Prefab = Tiles[(int)TileTypes.BlockedTile];
 
@@ -37,7 +38,10 @@ namespace Map{
             {
                 for (int x = -MAP_SIZE; x < MAP_SIZE; x++)
                 {
-                    map[0].SetTile(new Vector3Int(x, y, 0), tile);
+                    if(y == -MAP_SIZE || x == -MAP_SIZE || y == MAP_SIZE-1 || x == MAP_SIZE - 1)
+                        map[0].SetTile(new Vector3Int(x, y, 0), blockedTile);
+                    else
+                        map[0].SetTile(new Vector3Int(x, y, 0), tile);
                 }
             }
         }
@@ -75,10 +79,10 @@ namespace Map{
             {
                 for (int x = 0; x < sizeX; x++)
                 {
-                    MapTile currTile = (MapTile)map[0].GetTile(new Vector3Int((int)(xCenter - sizeX / 2) + x, (int)(yCenter - sizeY / 2) + y, 0));
-                    if (currTile != null && currTile.m_Prefab == Tiles[(int)TileTypes.BlockedTile])
+                    if (tileArray[x, y])
                     {
-                        if (currTile.isBlocked)
+                        MapTile currTile = (MapTile)map[0].GetTile(new Vector3Int((int)(xCenter - sizeX / 2) + x, (int)(yCenter - sizeY / 2) + y, 0));
+                        if (currTile != null && currTile.isBlocked)
                         {
                             return false;
                         }

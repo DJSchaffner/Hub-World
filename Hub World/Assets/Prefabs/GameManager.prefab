@@ -44,8 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridObj: {fileID: 2149232930144031586, guid: 47cb6366402967e42889298a0ea55ba1, type: 3}
-  BuildingObj: {fileID: 4513704618812038188, guid: 312387c819e4d034e958426717400c06,
-    type: 3}
   BuildingTypes:
-  - {fileID: 21300000, guid: 003d9add8557a6745913d3ef6ece5b9e, type: 3}
-  - {fileID: 21300000, guid: 914ef8099b7593141bc12f319f435db8, type: 3}
+  - {fileID: 6063853978243091293, guid: 94d6613b2a4d01e4b9f1610e6b9d5bb0, type: 3}

@@ -70,6 +70,12 @@ public class PlayerController : MonoBehaviour
             placingPos.z = 0;
 
             GameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
+
+            //TODO: Ressourcen-fressend da jeden Frame!
+            if(!map.IsPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea))
+                GameControl.Buildings[(int)BuildingTypes.Tavern].setSpriteColor(Color.red);
+            else
+                GameControl.Buildings[(int)BuildingTypes.Tavern].setSpriteColor(Color.white);
         }
         else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
         {

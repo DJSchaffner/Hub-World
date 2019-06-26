@@ -13,6 +13,7 @@ public class BuildingController : MonoBehaviour
     void Awake()
     {
         render = GetComponent<SpriteRenderer>();
+        polCollider = gameObject.GetComponent<PolygonCollider2D>();
     }
 
     // Wenn der linke Mausbutton auf diesem Object geklickt wurde
@@ -21,21 +22,30 @@ public class BuildingController : MonoBehaviour
         InteractWith();
     }
 
+    public void setSpriteColor(Color color)
+    {
+        render.color = color;
+    }
+
     public void SetBuildingType(Sprite sprite)
     {
-        render.sprite = sprite;
-        if (polCollider != null)
+        if (render.sprite != sprite)
         {
-            Destroy(polCollider);
+            render.sprite = sprite;
+            if (polCollider != null)
+            {
+                Destroy(polCollider);
+            }
+            polCollider = gameObject.AddComponent<PolygonCollider2D>();
         }
-        polCollider = gameObject.AddComponent<PolygonCollider2D>();
+
         BuildArea = DefineBuildingArea(polCollider);
         BuildArea = FillBuildingArea(BuildArea);
     }
 
-    private void InteractWith()
+    public virtual void InteractWith()
     {
-        Debug.Log("I'm opening my Menues!!");
+        Debug.Log("Opening my Menues!");
     }
 
     private bool[,] DefineBuildingArea(PolygonCollider2D placedObject)

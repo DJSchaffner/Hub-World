@@ -9,8 +9,7 @@ public class GameController : MonoBehaviour
     public static float TILE_SIZE;
 
     public GameObject GridObj;
-    public GameObject BuildingObj;
-    public Sprite[] BuildingTypes;
+    public GameObject[] BuildingTypes;
 
     public List<BuildingController> Buildings { get; set; }
 
@@ -27,10 +26,10 @@ public class GameController : MonoBehaviour
     private void InitBuildings()
     {
         Buildings = new List<BuildingController>();
-        foreach (Sprite buildingSp in BuildingTypes)
+        foreach (GameObject building in BuildingTypes)
         {
-            BuildingController bCont = Instantiate(BuildingObj).GetComponent<BuildingController>();
-            bCont.SetBuildingType(buildingSp);
+            BuildingController bCont = Instantiate(building).GetComponent<BuildingController>();
+            bCont.SetBuildingType(bCont.GetComponent<SpriteRenderer>().sprite);
             bCont.gameObject.SetActive(false);
             Buildings.Add(bCont);
         }
