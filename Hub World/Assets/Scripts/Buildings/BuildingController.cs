@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BuildingController : MonoBehaviour
 {
+    public Transform Entrance;
+
     public bool[,] BuildArea { get; set; }
 
     private PolygonCollider2D polCollider;
