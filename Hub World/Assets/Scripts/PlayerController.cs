@@ -5,7 +5,7 @@ using Map;
 
 public class PlayerController : MonoBehaviour
 {
-    private const int MAX_ZOOM_OUT = 50;
+    private const int MAX_ZOOM_OUT = 28;
     private const int MAX_ZOOM_IN = 10;
     private const int CAM_SPEED = 20;
     private const int ZOOM_SPEED = 10;
@@ -19,12 +19,20 @@ public class PlayerController : MonoBehaviour
     private bool isPlacing = false;
 
     private Camera cam;
+    private float screenAspect;
+    private float camHeight;
+    private float camWidth;
 
     // Start is called before the first frame update
     void Start()
     {
         cam = GetComponent<Camera>();
         cam.orthographicSize = DEFAULT_ZOOM;
+
+        screenAspect = (float)Screen.width / (float)Screen.height;
+        camHeight = cam.orthographicSize * 2;
+        float camHalfWidth = screenAspect * cam.orthographicSize;
+        camWidth = 2.0f * camHalfWidth;
 
         map = MapObject.GetComponent<MapController>();
         placingPos = new Vector3(0, 0, 0);
@@ -42,7 +50,15 @@ public class PlayerController : MonoBehaviour
      **/
     private void InputHandling()
     {
-        transform.Translate(Input.GetAxis("Horizontal") * CAM_SPEED * Time.deltaTime, Input.GetAxis("Vertical") * CAM_SPEED * Time.deltaTime, 0);
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            float moveX = Input.GetAxis("Horizontal") * CAM_SPEED * Time.deltaTime;
+            float moveY = Input.GetAxis("Vertical") * CAM_SPEED * Time.deltaTime;
+            if (map.InBounds(new Vector2(transform.position.x + moveX, transform.position.y + moveY), new Vector2(camWidth, camHeight)))
+            {
+                transform.Translate(moveX, moveY, 0);
+            }
+        }
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
@@ -52,6 +68,12 @@ public class PlayerController : MonoBehaviour
             {
                 cam.orthographicSize -= scrollVal;
             }
+
+            camHeight = cam.orthographicSize * 2;
+            float camHalfWidth = screenAspect * cam.orthographicSize;
+            camWidth = 2.0f * camHalfWidth;
+            if (!map.InBounds(transform.position, new Vector2(camWidth, camHeight)))
+                transform.position = map.GetBackInBounds(transform.position, new Vector2(camWidth, camHeight));
         }
 
         HandleBuildingInput();
