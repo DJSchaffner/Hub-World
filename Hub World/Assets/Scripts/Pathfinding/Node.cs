@@ -5,20 +5,20 @@ namespace Pathfinding
 {
   public class Node : IComparable
     {
-        public Vector3Int position { get; set; }
-        public Node previous       { get; set; }
-        public float traveled      { get; set; }
-        public float heuristic     { get; set; }
+        public Vector3Int Position { get; set; }
+        public Node Previous       { get; set; }
+        public float Traveled      { get; set; }
+        public float Heuristic     { get; set; }
 
         public Node (Vector3Int position, Node previous, float traveled, float heuristic) {
-            this.position = position;
-            this.previous = previous;
-            this.traveled = traveled;
-            this.heuristic = heuristic;
+            this.Position = position;
+            this.Previous = previous;
+            this.Traveled = traveled;
+            this.Heuristic = heuristic;
         }
 
         public float GetTotal() {
-            return this.traveled + this.heuristic;
+            return this.Traveled + this.Heuristic;
         }
 
         public int CompareTo(object obj) {

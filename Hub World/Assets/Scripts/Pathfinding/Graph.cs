@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using Map;
 
 namespace Pathfinding
 {
@@ -8,34 +9,45 @@ namespace Pathfinding
     {
         public class Cell
         {
-            public bool completed { get; set; }
-            public float heuristic { get; set; }
+            public bool IsBlocked     { get; set; }
+            public bool IsCompleted   { get; set; }
+            public float Heuristic  { get; set; }
 
-            public Cell(float heuristic) {
-                this.completed = false;
-                this.heuristic = heuristic;
+            public Cell(bool isBlocked, float heuristic) {
+                this.IsBlocked = isBlocked;
+                this.IsCompleted = false;
+                this.Heuristic = heuristic;
             }
         }
 
-        public int width        { get; set; }
-        public int height       { get; set; }
-        public Vector3Int start { get; set; }
-        public Vector3Int end   { get; set; }
-        public Cell[,] cells   { get; set; }
+        public int Width        { get; set; }
+        public int Height       { get; set; }
+        public Vector3Int Start { get; set; }
+        public Vector3Int End   { get; set; }
+        private Cell[,] cells    { get; set; }
 
         public Graph(Tilemap map, Vector3Int start, Vector3Int end) {
-            this.width = map.size.x;
-            this.height = map.size.y;
-            this.start = start;
-            this.end = end;
+            this.Width = map.size.x;
+            this.Height = map.size.y;
+            this.Start = start;
+            this.End = end;
             
-            cells = new Cell[height, width];
+            cells = new Cell[Height, Width];
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    cells[y, x] = new Cell(Math.Abs(end.x - x) + Math.Abs(end.y - y));
+            for (int y = 0; y < Height; y++) {
+                for (int x = 0; x < Width; x++) {
+                    cells[y, x] = new Cell(((MapTile) map.GetTile(new Vector3Int(x, y, 0))).isBlocked, Math.Abs(end.x - x) + Math.Abs(end.y - y));
                 }
             }
+        }
+
+        public Cell GetCell(Vector3Int vec) {
+            return cells[vec.y, vec.x];
+        }
+
+        public bool IsInbounds(Vector3Int position) {
+            return  position.x >= 0 && position.x < this.Width && 
+                    position.y >= 0 && position.y < this.Height;
         }
     }   
 }
