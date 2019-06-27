@@ -8,17 +8,21 @@ public enum TileTypes { BlockedTile = 0, GrassTile}
 namespace Map{
     public class MapController : MonoBehaviour
     {
-        private const int MAP_SIZE = 50;
+        public const int MAP_SIZE = 50;
+
         private const int BORDER_WIDTH = 3;
+        private const int HALF_WAY_SIZE = 8;
+        private const int SPAWN_AREAS = 2;
 
         public GameObject[] Tiles;
+        public Vector2Int[,] SpawnPoints { get; set; }
 
         private Tilemap[] map;
         private Grid grid;
         private MapTile blockedTile;
         private int totalMapSize;
 
-        void Start()
+        void Awake()
         {
             map = GetComponentsInChildren<Tilemap>();
             grid = GetComponentInParent<Grid>();
@@ -51,6 +55,22 @@ namespace Map{
                     else
                         map[0].SetTile(new Vector3Int(x, y, 0), tile);
                 }
+            }
+
+            SpawnPoints = new Vector2Int[SPAWN_AREAS, HALF_WAY_SIZE*2];
+
+            int i = 0;
+            for (int y = -(totalMapSize / 2) - HALF_WAY_SIZE; y < -(totalMapSize / 2) + HALF_WAY_SIZE; y++)
+            {
+                SpawnPoints[0, i] = new Vector2Int(-MAP_SIZE, y);
+                i++;
+            }
+
+            i = 0;
+            for (int y = (totalMapSize / 2) - HALF_WAY_SIZE; y < (totalMapSize / 2) + HALF_WAY_SIZE; y++)
+            {
+                SpawnPoints[1, i] = new Vector2Int(MAP_SIZE-1, y);
+                i++;
             }
         }
 

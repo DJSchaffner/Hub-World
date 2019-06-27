@@ -21,6 +21,7 @@ public class AdventurerController : MonoBehaviour
 
         pathFinding = new AStar();
         hasPath = false;
+        gameObject.SetActive(false);
     }
 
     void Update()

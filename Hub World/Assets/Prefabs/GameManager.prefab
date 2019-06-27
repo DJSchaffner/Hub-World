@@ -43,11 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 683e69353a31cf9429ba76f8c7d61dc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapObject: {fileID: 2149232930144031586, guid: 47cb6366402967e42889298a0ea55ba1,
-    type: 3}
-  PlayerObject: {fileID: 6112244641373316055, guid: b4cc1dd95d1b3114ba4f750f802d449c,
-    type: 3}
-  BuildingTypes:
+  MapObject: {fileID: 0}
+  PlayerObject: {fileID: 0}
+  BuildingObjects:
   - {fileID: 6063853978243091293, guid: 94d6613b2a4d01e4b9f1610e6b9d5bb0, type: 3}
   Adventurer: {fileID: 4757340537651860174, guid: 2e0d8d09dcabd984f887aac753439c0d,
     type: 3}

@@ -27,11 +27,11 @@ namespace Pathfinding
         private Cell[,] cells    { get; set; }
 
         public Graph(Tilemap map, Vector3Int start, Vector3Int end) {
-            this.Width = map.size.x;
-            this.Height = map.size.y;
+            this.Width = MapController.MAP_SIZE;
+            this.Height = MapController.MAP_SIZE;
             this.Start = start;
             this.End = end;
-            
+
             cells = new Cell[Height, Width];
 
             for (int y = 0; y < Height; y++) {

@@ -12,17 +12,19 @@ public class GameController : MonoBehaviour
 
     public GameObject MapObject;
     public GameObject PlayerObject;
-    public GameObject[] BuildingTypes;
+    public GameObject[] BuildingObjects;
     public GameObject Adventurer;
 
     public List<BuildingController> Buildings { get; set; }
+    //TODO: Eventuell besser ne BuildingController Liste zu machen und hin und her zu adden/removen
+    public List<BuildingTypes> completedBuildings { get; set; }
 
     private MapController map;
     private PlayerController player;
 
     private List<AdventurerController> adventurerPool;
     private int advCoolDown;
-    private int timer;
+    private float timer;
 
     void Awake()
     {
@@ -32,17 +34,17 @@ public class GameController : MonoBehaviour
 
         TILE_SIZE = (int)grid.cellSize.x;
 
+        InitAdventurers();
+        advCoolDown = 5;
+        timer = advCoolDown;
+
         player.InitPlayerCt(this, map);
         InitBuildings();
-        InitAdventurers();
-
-        advCoolDown = 2000;
-        timer = advCoolDown;
     }
 
     void Update()
     {
-        timer--;
+        timer -= Time.deltaTime;
         if (timer <= 0)
         {
             SpawnAdventurer();
@@ -53,7 +55,8 @@ public class GameController : MonoBehaviour
     private void InitBuildings()
     {
         Buildings = new List<BuildingController>();
-        foreach (GameObject building in BuildingTypes)
+        completedBuildings = new List<BuildingTypes>();
+        foreach (GameObject building in BuildingObjects)
         {
             BuildingController bCont = Instantiate(building).GetComponent<BuildingController>();
             bCont.SetBuildingType(bCont.GetComponent<SpriteRenderer>().sprite);
@@ -77,7 +80,16 @@ public class GameController : MonoBehaviour
         adventurerPool.Remove(newAdv);
 
         newAdv.gameObject.SetActive(true);
-        //newAdv.GetPath(map, );
+        int spawnPointInd = Random.Range(0, map.SpawnPoints.GetLength(1));
+        int spawnSide = Random.Range(0, 2);
+        newAdv.transform.position = (Vector3Int)map.SpawnPoints[spawnSide, spawnPointInd];
+
+        if (completedBuildings.Contains(BuildingTypes.Tavern))
+        {
+            Vector3 target = Buildings[(int)BuildingTypes.Tavern].Entrance.position;
+            Vector3Int targetCell = new Vector3Int((int)target.x, (int)target.y, 0);
+            newAdv.GetPath(map.GetMap()[0], targetCell);
+        }
     }
     
 }
