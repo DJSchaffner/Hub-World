@@ -4,6 +4,7 @@ using UnityEngine;
 
 /**
  * Abenteurer
+ * @author cgt103005: Joe Koelbel
  */
 public class Adventurer
 {
