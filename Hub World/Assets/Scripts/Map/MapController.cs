@@ -34,6 +34,11 @@ namespace Map{
             InitMap(grassTile);
         }
 
+        public Tilemap[] GetMap()
+        {
+            return map;
+        }
+
         private void InitMap(MapTile tile)
         {
             totalMapSize = (MAP_SIZE + BORDER_WIDTH);

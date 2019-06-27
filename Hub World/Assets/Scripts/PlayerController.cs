@@ -11,8 +11,7 @@ public class PlayerController : MonoBehaviour
     private const int ZOOM_SPEED = 10;
     private const int DEFAULT_ZOOM = 15;
 
-    public GameObject MapObject;
-    public GameController GameControl;
+    private GameController gameControl;
 
     private Vector3 placingPos;
     private MapController map;
@@ -34,7 +33,6 @@ public class PlayerController : MonoBehaviour
         float camHalfWidth = screenAspect * cam.orthographicSize;
         camWidth = 2.0f * camHalfWidth;
 
-        map = MapObject.GetComponent<MapController>();
         placingPos = new Vector3(0, 0, 0);
     }
 
@@ -42,6 +40,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         InputHandling();
+    }
+
+    public void InitPlayerCt(GameController gameControl, MapController map)
+    {
+        this.map = map;
+        this.gameControl = gameControl;
     }
 
     /**
@@ -81,9 +85,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBuildingInput()
     {
-        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea))
+        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea))
         {
-            map.PlaceObject((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea);
+            map.PlaceObject((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea);
             isPlacing = false;
         }
         else if (isPlacing)
@@ -91,21 +95,21 @@ public class PlayerController : MonoBehaviour
             placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             placingPos.z = 0;
 
-            GameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
+            gameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = new Vector3((int)placingPos.x, (int)placingPos.y);
 
             //TODO: Ressourcen-fressend da jeden Frame!
-            if(!map.IsPlacable((int)placingPos.x, (int)placingPos.y, GameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea))
-                GameControl.Buildings[(int)BuildingTypes.Tavern].setSpriteColor(Color.red);
+            if(!map.IsPlacable((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)BuildingTypes.Tavern].BuildArea))
+                gameControl.Buildings[(int)BuildingTypes.Tavern].setSpriteColor(Color.red);
             else
-                GameControl.Buildings[(int)BuildingTypes.Tavern].setSpriteColor(Color.white);
+                gameControl.Buildings[(int)BuildingTypes.Tavern].setSpriteColor(Color.white);
         }
         else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
         {
             isPlacing = true;
             placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             placingPos.z = 0;
-            GameControl.Buildings[(int)BuildingTypes.Tavern].gameObject.SetActive(true);
-            GameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            gameControl.Buildings[(int)BuildingTypes.Tavern].gameObject.SetActive(true);
+            gameControl.Buildings[(int)BuildingTypes.Tavern].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }

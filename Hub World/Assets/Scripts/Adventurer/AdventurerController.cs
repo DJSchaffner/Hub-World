@@ -6,7 +6,8 @@ using Pathfinding;
 
 public class AdventurerController : MonoBehaviour
 {
-    private const float MOVE_SPEED = 1f;
+    private const float MOVE_SPEED = 0.2f;
+    private const float OFFSET = 0.1f;
 
     private Adventurer needs;
     private AStar pathFinding;
@@ -40,7 +41,8 @@ public class AdventurerController : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, newPath[0], MOVE_SPEED);
             Vector3Int cellPos = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
-            if (cellPos == newPath[0])
+            if (cellPos.x <= newPath[0].x + OFFSET && cellPos.x >= newPath[0].x - OFFSET
+                && cellPos.y <= newPath[0].y + OFFSET && cellPos.y >= newPath[0].y - OFFSET)
                 newPath.Remove(newPath[0]);
         }
         else

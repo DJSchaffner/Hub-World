@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Adventurer : MonoBehaviour
+public class Adventurer
 {
     //Zufriedenheit (<25% debuff >75% buff)
     private int wellBeing = 50;
