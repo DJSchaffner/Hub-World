@@ -31,17 +31,14 @@ public class Adventurer
     private Weapon weapon = Weapon.None;
     //Währung
     private int coins = 50;
-<<<<<<< HEAD
     //TODO: weitere Güter (z.B. Heiltränke), so nicht ideal -> Map<Gear, int>? 
     private List<Gear> obstacleGear = new List<Gear>();
 
 
-=======
     //Sonstige Gegenstände (z.B. Heiltränke) 
     private Dictionary<Gear, int> otherGear = new Dictionary<Gear, int>();
 
     
->>>>>>> Adventurer
     /**
      * Standardkonstruktor
      */
@@ -91,15 +88,12 @@ public class Adventurer
             case AdventurerClass.Warlock:
               wantedGear = Gear.Incense;
               break;
-<<<<<<< HEAD
             default:
               wantedGear = Gear.Torch;
               break;
-=======
             case AdventurerClass.None:
                wantedGear = Gear.Torch;
                break;
->>>>>>> Adventurer
         }
     }
 
@@ -168,24 +162,18 @@ public class Adventurer
      * Verändert den Nahrungswert, achtet auf einen Bereich zwischen 0 und 100
      * @param percent Zahl, um die der Nahrungswert verändert wird
      */
-<<<<<<< HEAD
     private void addWellBeing(int percent) {
         wellBeing = checkRange(wellBeing + percent);
     }
 
-=======
->>>>>>> Adventurer
     private void addFoodPercent(int percent) {
         foodPercent = checkRange(foodPercent + percent);
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Verändert den durstwert, achtet auf einen Bereich zwischen 0 und 100
      * @param percent Zahl, um die der Durstwert verändert wird
      */
->>>>>>> Adventurer
     private void addDrinkPercent(int percent) {
         drinkPercent = checkRange(drinkPercent + percent);
     }
