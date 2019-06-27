@@ -7,6 +7,8 @@ using UnityEngine;
  */
 public class Adventurer
 {
+    //Prozent, die pro Nahrungsmittel / Getränk hinzugefügt werden
+    private const int PERCENT_PER_FOOD_DRINK = 20;
     //Zeit nach der Zufriedenheit abgezogen wird, wenn favorisierte Nahrung/Getränk nicht vorhanden ist
     private const double MAX_TIME_WITHOUT_FOOD_DRINK = 60000.0;
     //Zufriedenheit
@@ -246,9 +248,9 @@ public class Adventurer
      * @param food Nahrung
      */
      public void eatSomething(Food food, double timeSinceLastCall) {
-         //Nahrungshändler finden + hingehen
+         //Taverne finden + hingehen
          //if (coins >= Nahrungspreis) {
-             addFoodPercent(20);
+             addFoodPercent(PERCENT_PER_FOOD_DRINK);
              //coins -= Nahrungspreis
              if (food == this.food) {
                this.timeSinceLastFood = 0.0;
@@ -264,9 +266,9 @@ public class Adventurer
      * @param drink Getränk
      */
      public void drinkSomething(Drink drink, double timeSinceLastCall) {
-         //Getränkehändler finden + hingehen
+         //Taverne finden + hingehen
          //if (coins >= Getränkepreis) {
-             addDrinkPercent(20);
+             addDrinkPercent(PERCENT_PER_FOOD_DRINK);
              //coins -= Getränkepreis
              if (drink == this.drink) {
                  this.timeSinceLastDrink = 0.0;
