@@ -7,12 +7,18 @@ using UnityEngine;
  */
 public class Adventurer
 {
+    //Zeit nach der Zufriedenheit abgezogen wird, wenn favorisierte Nahrung/Getränk nicht vorhanden ist
+    private const double MAX_TIME_WITHOUT_FOOD_DRINK = 60000.0;
     //Zufriedenheit
     private int wellBeing = 50;
     //Bevorzugte Nahrung
     private Food food;
     //Bevorzugtes Getränk
     private Drink drink;
+    //Zeit seitdem das letzte Mal bevorzugte Nahrung gegessen wurde 
+    private double timeSinceLastFood = 0.0;
+    //Zeit seitdem das letzte Mal bevorzugtes Getränk getrunken wurde
+    private double timeSinceLastDrink = 0.0;
     //Hunger, wenn <20%
     private int foodPercent = 50;
     //Durst, wenn <20%
@@ -31,10 +37,6 @@ public class Adventurer
     private Weapon weapon = Weapon.None;
     //Währung
     private int coins = 50;
-    //TODO: weitere Güter (z.B. Heiltränke), so nicht ideal -> Map<Gear, int>? 
-    private List<Gear> obstacleGear = new List<Gear>();
-
-
     //Sonstige Gegenstände (z.B. Heiltränke) 
     private Dictionary<Gear, int> otherGear = new Dictionary<Gear, int>();
 
@@ -98,6 +100,21 @@ public class Adventurer
     }
 
     /**
+     * Prüft, ob eine Zahl zwischen 0 und 100 ist
+     * @param value zu prüfende Zahl
+     * @return Zahl < 0 -> 0; Zahl > 100 -> 100; sonst -> Zahl
+     */
+    private int checkRange(int value) {
+        if (value < 0) {
+            return 0;
+        } else if (value > 100) {
+            return 100;
+        } else {
+            return value;
+        }
+    }
+
+    /**
      * Berechnet und setzt den aktuellen Zufriedenheitswert
      */
     private void calculateWellBeing() {
@@ -113,6 +130,10 @@ public class Adventurer
             wellBeing += 4;
         }
 
+        for (double run = timeSinceLastFood; run > MAX_TIME_WITHOUT_FOOD_DRINK; run -= MAX_TIME_WITHOUT_FOOD_DRINK) {
+            wellBeing -= 5;
+        }
+
         if (drinkPercent > 95) {
             wellBeing += 20;
         } else if (drinkPercent > 75) {
@@ -121,6 +142,10 @@ public class Adventurer
             wellBeing += 8;
         } else if (drinkPercent > 25) {
             wellBeing += 4;
+        }
+
+        for (double run = timeSinceLastDrink; run > MAX_TIME_WITHOUT_FOOD_DRINK; run -= MAX_TIME_WITHOUT_FOOD_DRINK) {
+            wellBeing -= 5;
         }
 
         if (armor != Armor.None) {
@@ -140,32 +165,13 @@ public class Adventurer
         } else if (amountOfGear > 25) {
             wellBeing += 4;
         }
-        this.wellBeing = wellBeing;
-    }
-
-    /**
-     * Prüft, ob eine Zahl zwischen 0 und 100 ist
-     * @param value zu prüfende Zahl
-     * @return Zahl < 0 -> 0; Zahl > 100 -> 100; sonst -> Zahl
-     */
-    private int checkRange(int value) {
-        if (value < 0) {
-            return 0;
-        } else if (value > 100) {
-            return 100;
-        } else {
-            return value;
-        }
+        this.wellBeing = checkRange(wellBeing);
     }
 
     /**
      * Verändert den Nahrungswert, achtet auf einen Bereich zwischen 0 und 100
      * @param percent Zahl, um die der Nahrungswert verändert wird
      */
-    private void addWellBeing(int percent) {
-        wellBeing = checkRange(wellBeing + percent);
-    }
-
     private void addFoodPercent(int percent) {
         foodPercent = checkRange(foodPercent + percent);
     }
@@ -239,11 +245,16 @@ public class Adventurer
      * Nahrungsaufnahme
      * @param food Nahrung
      */
-     public void eatSomething(Food food) {
+     public void eatSomething(Food food, double timeSinceLastCall) {
          //Nahrungshändler finden + hingehen
          //if (coins >= Nahrungspreis) {
              addFoodPercent(20);
              //coins -= Nahrungspreis
+             if (food == this.food) {
+               this.timeSinceLastFood = 0.0;
+             } else {
+                 this.timeSinceLastFood += timeSinceLastCall;
+             }
          //}
          //Random herumlaufen
      }
@@ -252,11 +263,16 @@ public class Adventurer
      * Trinken
      * @param drink Getränk
      */
-     public void drinkSomething(Drink drink) {
+     public void drinkSomething(Drink drink, double timeSinceLastCall) {
          //Getränkehändler finden + hingehen
          //if (coins >= Getränkepreis) {
              addDrinkPercent(20);
              //coins -= Getränkepreis
+             if (drink == this.drink) {
+                 this.timeSinceLastDrink = 0.0;
+             } else {
+                 this.timeSinceLastDrink += timeSinceLastCall;
+             }
          //}
          //Random herumlaufen
      }
