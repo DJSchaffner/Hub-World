@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * Abenteurer
+ */
 public class Adventurer
 {
-    //Zufriedenheit (<25% debuff >75% buff)
+    //Zufriedenheit
     private int wellBeing = 50;
     //Bevorzugte Nahrung
     private Food food;
@@ -28,10 +31,17 @@ public class Adventurer
     private Weapon weapon = Weapon.None;
     //Währung
     private int coins = 50;
+<<<<<<< HEAD
     //TODO: weitere Güter (z.B. Heiltränke), so nicht ideal -> Map<Gear, int>? 
     private List<Gear> obstacleGear = new List<Gear>();
 
 
+=======
+    //Sonstige Gegenstände (z.B. Heiltränke) 
+    private Dictionary<Gear, int> otherGear = new Dictionary<Gear, int>();
+
+    
+>>>>>>> Adventurer
     /**
      * Standardkonstruktor
      */
@@ -81,12 +91,69 @@ public class Adventurer
             case AdventurerClass.Warlock:
               wantedGear = Gear.Incense;
               break;
+<<<<<<< HEAD
             default:
               wantedGear = Gear.Torch;
               break;
+=======
+            case AdventurerClass.None:
+               wantedGear = Gear.Torch;
+               break;
+>>>>>>> Adventurer
         }
     }
 
+    /**
+     * Berechnet und setzt den aktuellen Zufriedenheitswert
+     */
+    private void calculateWellBeing() {
+        int wellBeing = 0;
+
+        if (foodPercent > 95) {
+            wellBeing += 20;
+        } else if (foodPercent > 75) {
+            wellBeing += 12;
+        } else if (foodPercent > 50) {
+            wellBeing += 8;
+        } else if (foodPercent > 25) {
+            wellBeing += 4;
+        }
+
+        if (drinkPercent > 95) {
+            wellBeing += 20;
+        } else if (drinkPercent > 75) {
+            wellBeing += 12;
+        } else if (drinkPercent > 50) {
+            wellBeing += 8;
+        } else if (drinkPercent > 25) {
+            wellBeing += 4;
+        }
+
+        if (armor != Armor.None) {
+            wellBeing += 20;
+        }
+
+        if (weapon != Weapon.None) {
+            wellBeing += 20;
+        }
+
+        if (amountOfGear > 100) {
+            wellBeing += 20;
+        } else if (amountOfGear > 75) {
+            wellBeing += 12;
+        } else if (amountOfGear > 50) {
+            wellBeing += 8;
+        } else if (amountOfGear > 25) {
+            wellBeing += 4;
+        }
+        this.wellBeing = wellBeing;
+    }
+
+    /**
+     * Prüft, ob eine Zahl zwischen 0 und 100 ist
+     * @param value zu prüfende Zahl
+     * @return Zahl < 0 -> 0; Zahl > 100 -> 100; sonst -> Zahl
+     */
     private int checkRange(int value) {
         if (value < 0) {
             return 0;
@@ -98,17 +165,27 @@ public class Adventurer
     }
 
     /**
-     * Verändert den Zufriedenheitswert, achtet auf einen Bereich zwischen 0 und 100
-     * @param percent Zahl, um die der Zufriedenheitswert verändert wird
+     * Verändert den Nahrungswert, achtet auf einen Bereich zwischen 0 und 100
+     * @param percent Zahl, um die der Nahrungswert verändert wird
      */
+<<<<<<< HEAD
     private void addWellBeing(int percent) {
         wellBeing = checkRange(wellBeing + percent);
     }
 
+=======
+>>>>>>> Adventurer
     private void addFoodPercent(int percent) {
         foodPercent = checkRange(foodPercent + percent);
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Verändert den durstwert, achtet auf einen Bereich zwischen 0 und 100
+     * @param percent Zahl, um die der Durstwert verändert wird
+     */
+>>>>>>> Adventurer
     private void addDrinkPercent(int percent) {
         drinkPercent = checkRange(drinkPercent + percent);
     }
@@ -124,9 +201,6 @@ public class Adventurer
         //if (coins >= Waffenpreis) {
           this.weapon = weapon;
           //coins -= Waffenpreis
-          addWellBeing(10);
-        //} else {
-          addWellBeing(-10);
         //}
         //Random herumlaufen
     }
@@ -140,9 +214,6 @@ public class Adventurer
         //if (coins >= Rüstungspreis) {
             this.armor = armor;
             //coins -= Rüstungspreis
-            addWellBeing(10);
-        //} else {
-            addWellBeing(-10);
         //}
         //Random herumlaufen
     }
@@ -154,6 +225,7 @@ public class Adventurer
         //Händler des benötigten Luxusgutes finden + hingehen
         //if (coins >= Luxusgutpreis) {
             amountOfGear++;
+            //coins -= Luxusgutspreis
         //}
         //Random herumlaufen
     }
@@ -165,42 +237,48 @@ public class Adventurer
      public void buyGear(Gear gear) {
          //Händler des Guts finden + hingehen
          //if (coins >= Gutspreis) {
-             this.obstacleGear.Add(gear);
+            if(otherGear.ContainsKey(gear)) {
+                this.otherGear[gear]++;
+            } else {
+                otherGear.Add(gear, 1);
+            }
+            //coins -= gearpreis
          //}
          //Random herumlaufen
      }
 
     /**
-     * 
+     * Nahrungsaufnahme
+     * @param food Nahrung
      */
      public void eatSomething(Food food) {
          //Nahrungshändler finden + hingehen
          //if (coins >= Nahrungspreis) {
-             if (food == this.food) {
-                 addWellBeing(10);
-             } else {
-                 addWellBeing(-2);
-             }
              addFoodPercent(20);
-         //} else {
-             addWellBeing(-5);
+             //coins -= Nahrungspreis
          //}
          //Random herumlaufen
      }
 
+    /**
+     * Trinken
+     * @param drink Getränk
+     */
      public void drinkSomething(Drink drink) {
          //Getränkehändler finden + hingehen
          //if (coins >= Getränkepreis) {
-             if (drink == this.drink) {
-                 addWellBeing(10);
-             } else {
-                 addWellBeing(-2);
-             }
              addDrinkPercent(20);
-         //} else {
-             addWellBeing(-5);
+             //coins -= Getränkepreis
          //}
          //Random herumlaufen
+     }
+
+    /**
+     * Abenteurer bekommt Münzen (z.B. durch Dungeonbesuch)
+     * @param coins Münzen, die der Abenteurer bekommt
+     */
+     public void earnCoins(int coins) {
+         this.coins += coins;
      }
 
 }
