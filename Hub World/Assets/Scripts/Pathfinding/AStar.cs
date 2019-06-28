@@ -53,7 +53,16 @@ namespace Pathfinding
         private IEnumerable<Node> GetNeighbors(Graph graph, Vector3Int end, List<Node> list, Node current) {
             foreach (Vector3Int neighbor in NEIGHBORS) {
                 if (graph.IsInbounds(current.Position + neighbor) && !graph.GetCell(current.Position + neighbor).IsBlocked) {
-                    Node temp = new Node(current.Position + neighbor, current, current.Traveled + 1, graph.GetCell(current.Position + neighbor).Heuristic);
+                    Node temp;
+                    try
+                    {
+                        temp = new Node(current.Position + neighbor, current, current.Traveled + 1, graph.GetCell(current.Position + neighbor).Heuristic);
+                    }
+                    catch (System.IndexOutOfRangeException)
+                    {
+
+                        throw;
+                    }
 
                     if (!list.HasNode(temp))
                         yield return temp;
