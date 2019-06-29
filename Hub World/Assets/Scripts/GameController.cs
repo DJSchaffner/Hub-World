@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour
         {
             Vector3 target = Buildings[(int)BuildingTypes.Tavern].Entrance.position;
             Vector3Int targetCell = new Vector3Int((int)target.x, (int)target.y, 0);
-            newAdv.GetPath(map.GetMap()[0], targetCell);
+            newAdv.StartPath(map.GetMap()[0], targetCell);
         }
     }
     

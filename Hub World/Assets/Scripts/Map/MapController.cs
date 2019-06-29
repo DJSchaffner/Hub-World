@@ -8,7 +8,7 @@ public enum TileTypes { BlockedTile = 0, GrassTile}
 namespace Map{
     public class MapController : MonoBehaviour
     {
-        public const int MAP_SIZE = 50;
+        public const int MAP_SIZE = 100;
 
         private const int BORDER_WIDTH = 3;
         private const int HALF_WAY_SIZE = 8;
@@ -20,7 +20,7 @@ namespace Map{
         private Tilemap[] map;
         private Grid grid;
         private MapTile blockedTile;
-        private int totalMapSize;
+        private int halfMapSize;
 
         void Awake()
         {
@@ -45,12 +45,12 @@ namespace Map{
 
         private void InitMap(MapTile tile)
         {
-            totalMapSize = (MAP_SIZE + BORDER_WIDTH);
-            for (int y = -totalMapSize; y < totalMapSize; y++)
+            int totalMapSize = MAP_SIZE + BORDER_WIDTH;
+            for (int y = 0; y < totalMapSize; y++)
             {
-                for (int x = -totalMapSize; x < totalMapSize; x++)
+                for (int x = 0; x < totalMapSize; x++)
                 {
-                    if(y <= -MAP_SIZE || x <= -MAP_SIZE || y >= MAP_SIZE-1 || x >= MAP_SIZE - 1)
+                    if(y < BORDER_WIDTH || x < BORDER_WIDTH || y > MAP_SIZE -1 || x > MAP_SIZE -1)
                         map[0].SetTile(new Vector3Int(x, y, 0), blockedTile);
                     else
                         map[0].SetTile(new Vector3Int(x, y, 0), tile);
@@ -58,28 +58,23 @@ namespace Map{
             }
 
             SpawnPoints = new Vector2Int[SPAWN_AREAS, HALF_WAY_SIZE*2];
+            halfMapSize = ((MAP_SIZE / 2) + BORDER_WIDTH);
 
             int i = 0;
-            for (int y = -(totalMapSize / 2) - HALF_WAY_SIZE; y < -(totalMapSize / 2) + HALF_WAY_SIZE; y++)
+            for (int y = (halfMapSize - HALF_WAY_SIZE); y < (halfMapSize + HALF_WAY_SIZE); y++)
             {
-                SpawnPoints[0, i] = new Vector2Int(-MAP_SIZE, y);
-                i++;
-            }
-
-            i = 0;
-            for (int y = (totalMapSize / 2) - HALF_WAY_SIZE; y < (totalMapSize / 2) + HALF_WAY_SIZE; y++)
-            {
-                SpawnPoints[1, i] = new Vector2Int(MAP_SIZE-1, y);
+                SpawnPoints[0, i] = new Vector2Int(0, y);
+                SpawnPoints[1, i] = new Vector2Int(MAP_SIZE - 1, y);
                 i++;
             }
         }
 
         public bool InBounds(Vector2 position, Vector2 camSize)
         {
-            float boundsXRight = transform.position.x + totalMapSize;
-            float boundsXLeft = transform.position.x - totalMapSize;
-            float boundsYUp = transform.position.y + totalMapSize;
-            float boundsYDown = transform.position.y - totalMapSize;
+            float boundsXRight = MAP_SIZE + BORDER_WIDTH;
+            float boundsXLeft = 0;
+            float boundsYUp = MAP_SIZE + BORDER_WIDTH;
+            float boundsYDown = 0;
 
             if (position.x + camSize.x/2 > boundsXRight
                 || position.x - camSize.x/2 < boundsXLeft
@@ -94,10 +89,10 @@ namespace Map{
         public Vector3 GetBackInBounds(Vector3 position, Vector2 camSize)
         {
             Vector3 newPos = new Vector3(0, 0, position.z);
-            float boundsXRight = transform.position.x + totalMapSize;
-            float boundsXLeft = transform.position.x - totalMapSize;
-            float boundsYUp = transform.position.y + totalMapSize;
-            float boundsYDown = transform.position.y - totalMapSize;
+            float boundsXRight = MAP_SIZE + BORDER_WIDTH;
+            float boundsXLeft = 0;
+            float boundsYUp = MAP_SIZE + BORDER_WIDTH;
+            float boundsYDown = 0;
 
             float halfCamSizeX = (camSize.x / 2);
             float halfCamSizeY = (camSize.y / 2);

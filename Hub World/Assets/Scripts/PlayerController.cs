@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour
     {
         this.map = map;
         this.gameControl = gameControl;
+
+        this.transform.position = new Vector3(MapController.MAP_SIZE/2, MapController.MAP_SIZE / 2, transform.position.z);
     }
 
     /**

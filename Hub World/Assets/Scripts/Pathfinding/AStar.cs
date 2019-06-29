@@ -8,10 +8,10 @@ namespace Pathfinding
   public class AStar
     {
         private Vector3Int[] NEIGHBORS = new [] {
-            new Vector3Int(-1, 0, 0),   // North
-            new Vector3Int(0, 1, 0),    // East
-            new Vector3Int(1, 0, 0),    // South
-            new Vector3Int(0, -1, 0),   // West
+            new Vector3Int(0, 1, 0),   // North
+            new Vector3Int(1, 0, 0),    // East
+            new Vector3Int(0, -1, 0),    // South
+            new Vector3Int(-1, 0, 0),   // West
         };
 
         public List<Vector3Int> FindPath(Tilemap map, Vector3Int start, Vector3Int end) {
