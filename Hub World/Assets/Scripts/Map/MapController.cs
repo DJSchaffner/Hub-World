@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum TileTypes { BlockedTile = 0, GrassTile}
-
 namespace Map{
+
+    public enum TileTypes { BlockedTile = 0, GrassTile }
+
     public class MapController : MonoBehaviour
     {
         public const int MAP_SIZE = 100;
@@ -63,7 +64,7 @@ namespace Map{
             int i = 0;
             for (int y = (halfMapSize - HALF_WAY_SIZE); y < (halfMapSize + HALF_WAY_SIZE); y++)
             {
-                SpawnPoints[0, i] = new Vector2Int(0, y);
+                SpawnPoints[0, i] = new Vector2Int(BORDER_WIDTH, y);
                 SpawnPoints[1, i] = new Vector2Int(MAP_SIZE - 1, y);
                 i++;
             }

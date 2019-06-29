@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
     public GameObject PlayerObject;
     public GameObject[] BuildingObjects;
     public GameObject Adventurer;
+    public GameObject ObjectPool;
 
     public List<BuildingController> Buildings { get; set; }
     //TODO: Eventuell besser ne BuildingController Liste zu machen und hin und her zu adden/removen
@@ -59,6 +60,7 @@ public class GameController : MonoBehaviour
         foreach (GameObject building in BuildingObjects)
         {
             BuildingController bCont = Instantiate(building).GetComponent<BuildingController>();
+            bCont.transform.parent = ObjectPool.transform;
             bCont.SetBuildingType(bCont.GetComponent<SpriteRenderer>().sprite);
             bCont.gameObject.SetActive(false);
             Buildings.Add(bCont);
@@ -70,7 +72,9 @@ public class GameController : MonoBehaviour
         adventurerPool = new List<AdventurerController>();
         for (int i = 0; i < ADV_POOL_SIZE; i++)
         {
-            adventurerPool.Add(Instantiate(Adventurer).GetComponent<AdventurerController>());
+            GameObject newAdv = Instantiate(Adventurer);
+            newAdv.transform.parent = ObjectPool.transform;
+            adventurerPool.Add(newAdv.GetComponent<AdventurerController>());
         }
     }
 

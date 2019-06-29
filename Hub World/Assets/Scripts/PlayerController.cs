@@ -89,6 +89,23 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBuildingInput()
     {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (!isPlacing)
+            {
+                isPlacing = true;
+                placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                placingPos.z = 0;
+                gameControl.Buildings[(int)selectedBuilding].gameObject.SetActive(true);
+                gameControl.Buildings[(int)selectedBuilding].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            }
+            else
+            {
+                gameControl.Buildings[(int)selectedBuilding].gameObject.SetActive(false);
+                isPlacing = false;
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea))
         {
             map.PlaceObject((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea);
@@ -107,14 +124,6 @@ public class PlayerController : MonoBehaviour
                 gameControl.Buildings[(int)selectedBuilding].setSpriteColor(Color.red);
             else
                 gameControl.Buildings[(int)selectedBuilding].setSpriteColor(Color.white);
-        }
-        else if (!isPlacing && Input.GetKeyDown(KeyCode.B))
-        {
-            isPlacing = true;
-            placingPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            placingPos.z = 0;
-            gameControl.Buildings[(int)selectedBuilding].gameObject.SetActive(true);
-            gameControl.Buildings[(int)selectedBuilding].transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
     }
 }
