@@ -20,19 +20,20 @@ namespace Pathfinding
             List<Node> done = new List<Node>();
             List<Vector3Int> result = new List<Vector3Int>();
             Node current;
-
+            Debug.Log(start);
             // Init library
             library.Add(new Node(start, null, 0, graph.GetCell(start).Heuristic));
         
             while (!IsFinished(library, start, end)) {
                 // Get current best candidate and move it to done
-                current = library.Last();
+                current = library.First();
                 done.Add(current);
-                library.RemoveAt(library.Count - 1);
+                library.RemoveAt(0);
                 graph.GetCell(current.Position).IsCompleted = true;
 
                 // Get new candidates, insert them and sort the library
                 library.AddRange(GetNeighbors(graph, end, library, current));
+                // Sort library (lowest total first, highest last)
                 library.Sort();
             }
 
@@ -47,7 +48,7 @@ namespace Pathfinding
         }
 
         public bool IsFinished(List<Node> library, Vector3Int start, Vector3Int end) {
-            return library.Count == 0 || library.Last().Position == end; 
+            return library.Count == 0 || library.First().Position == end; 
         }
 
         private IEnumerable<Node> GetNeighbors(Graph graph, Vector3Int end, List<Node> list, Node current) {
