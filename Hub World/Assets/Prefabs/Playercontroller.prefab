@@ -96,5 +96,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb599344bbb725140baef17f45e861eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapObject: {fileID: 0}
-  GameControl: {fileID: 0}
+  testSound1: {fileID: 8300000, guid: 706b75f430b13ed49a2440669ac4b3cd, type: 3}
+  testSound2: {fileID: 8300000, guid: 9afaaff4d363bb346a4609d0ca9aba31, type: 3}
