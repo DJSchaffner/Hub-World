@@ -20,7 +20,7 @@ namespace Pathfinding
             List<Node> done = new List<Node>();
             List<Vector3Int> result = new List<Vector3Int>();
             Node current;
-            Debug.Log(start);
+            
             // Init library
             library.Add(new Node(start, null, 0, graph.GetCell(start).Heuristic));
         
@@ -31,7 +31,7 @@ namespace Pathfinding
                 library.RemoveAt(0);
                 graph.GetCell(current.Position).IsCompleted = true;
 
-                // Get new candidates, insert them and sort the library
+                // Get new candidates, insert them
                 library.AddRange(GetNeighbors(graph, end, library, current));
                 // Sort library (lowest total first, highest last)
                 library.Sort();
@@ -42,7 +42,7 @@ namespace Pathfinding
                 result.Add(n.Position);
             }
 
-            Utils.PrintList(result);
+            //Utils.PrintList(result);
 
             return result;
         }
@@ -53,20 +53,13 @@ namespace Pathfinding
 
         private IEnumerable<Node> GetNeighbors(Graph graph, Vector3Int end, List<Node> list, Node current) {
             foreach (Vector3Int neighbor in NEIGHBORS) {
-                if (graph.IsInbounds(current.Position + neighbor) && !graph.GetCell(current.Position + neighbor).IsBlocked) {
+                if (graph.IsInbounds(current.Position + neighbor) && !graph.GetCell(current.Position + neighbor).IsBlocked && !graph.GetCell(current.Position + neighbor).IsCompleted) {
                     Node temp;
-                    try
-                    {
-                        temp = new Node(current.Position + neighbor, current, current.Traveled + 1, graph.GetCell(current.Position + neighbor).Heuristic);
-                    }
-                    catch (System.IndexOutOfRangeException)
-                    {
+                    temp = new Node(current.Position + neighbor, current, current.Traveled + 1, graph.GetCell(current.Position + neighbor).Heuristic);
 
-                        throw;
-                    }
-
-                    if (!list.HasNode(temp))
+                    if (!list.HasNode(temp)){
                         yield return temp;
+                    }
                 }                
             }
         }
