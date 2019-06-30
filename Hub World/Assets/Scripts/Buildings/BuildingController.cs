@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * Building-Controller Komponente
+ * @author cgt102461: Nicolas Begic
+ */
 public class BuildingController : MonoBehaviour
 {
+    //Position des Eingangs dieses Gebäudes
     public Transform Entrance;
 
+    //BoolArray, welches die Positionen auf der Tilemap speichert,
+    //die dieses Gebäude bei Platzierung bedecken wird
     public bool[,] BuildArea { get; set; }
 
+    //Wichtige Komponenten
     private PolygonCollider2D polCollider;
     private SpriteRenderer render;
 
@@ -24,20 +32,30 @@ public class BuildingController : MonoBehaviour
         InteractWith();
     }
 
+    /**
+     * Setzt die Farbe des Sprites des Gebäudes
+     */
     public void setSpriteColor(Color color)
     {
         render.color = color;
     }
 
+    /**
+     * Setzt den Sprite und den Typen des Gebäudes
+     * und initialisiert seinen BuildArea.
+     */
     public void SetBuildingType(Sprite sprite)
     {
+        //Falls das Gebäude bereits einen Sprite hatte
         if (render.sprite != sprite)
         {
+            //Wird dieser aktualisiert
             render.sprite = sprite;
             if (polCollider != null)
             {
                 Destroy(polCollider);
             }
+            //Und sein Collider neu berechnet
             polCollider = gameObject.AddComponent<PolygonCollider2D>();
         }
 
@@ -45,11 +63,23 @@ public class BuildingController : MonoBehaviour
         BuildArea = FillBuildingArea(BuildArea);
     }
 
+    /**
+     * Ruft das Menü für den derzeitigen Gebäude-Typen auf
+     */
     public virtual void InteractWith()
     {
         Debug.Log("Opening my Menues!");
     }
 
+    /**
+     * Füllt das tileArray mit Werten,
+     * abhängig von der Größe und dem Verlauf des PolygonColliders des Gebäudes
+     * 
+     * param: placedObject Pol-Collider des Gebäudes
+     * return bool[,]: Bool-Array in der Größe des zu platzierenden Gebäudes,
+     *                 welches die Tiles mit true markiert hat,
+     *                 die sich in dem Pol-Collider befinden.
+     */
     private bool[,] DefineBuildingArea(PolygonCollider2D placedObject)
     {
         float sizeX = placedObject.bounds.size.x;
@@ -103,7 +133,7 @@ public class BuildingController : MonoBehaviour
 
                                     //Berechnet den Richtungs-Vektor zwischen dem aktuellen Punkt und der neuen Position
                                     Vector2 newPointDirection = worldLerp - point;
-                                    //Berechnet die ungefähre Grid.Position
+                                    //Berechnet die ungefähre Grid Position
                                     Vector2 vagueCellPos = new Vector2(point.x + (newPointDirection.x * k), point.y + (newPointDirection.y * k));
 
                                     Vector3Int roundedCellX = new Vector3Int(0, 0, 0);
@@ -142,7 +172,19 @@ public class BuildingController : MonoBehaviour
         return tileMap;
     }
 
-
+    /**
+     * Setzt ein Tile im übergebenen tileMap-Array
+     * an den übergebenen Positions-Daten x und y,
+     * verschoben um die übergebenen Offset-Werte.
+     * 
+     * param: x xKoord auf Tilemap
+     * param: y yKoord auf Tilemap
+     * param: indexOffsetX x-Verschiebung auf Tilemap
+     * param: indexOffsetY y-Verschiebung auf Tilemap
+     * param: tileMap Bool-Array in der Größe des zu platzierenden Gebäudes,
+     *                welches die Tiles mit true markiert hat,
+     *                die sich in dem Pol-Collider befinden.
+     */
     private void setTile(int x, int y, int indexOffsetX, int indexOffsetY, bool[,] tileMap)
     {
         int indexX = x - indexOffsetX, indexY = y - indexOffsetY;
@@ -159,6 +201,16 @@ public class BuildingController : MonoBehaviour
         tileMap[indexX, indexY] = true;
     }
 
+    /**
+     * Füllt das übergebene tileMap-Array
+     * zwischen zwei in eine Linie liegenden Positionen,
+     * die auf True gesetzt wurden.
+     * 
+     * param: tileMap Bool-Array in der Größe des zu platzierenden Gebäudes,
+     *                welches die Tiles mit true markiert hat,
+     *                die sich in dem Pol-Collider befinden.
+     * return bool[,]: gefüllte tileMap
+     */
     private bool[,] FillBuildingArea(bool[,] tileMap)
     {
         bool fillLine;
