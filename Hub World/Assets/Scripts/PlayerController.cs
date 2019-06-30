@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
     private float camHeight;
     private float camWidth;
 
+    // 2 Testsounds die bisher nur bei dem Platzieren eines Gebäudes abgespielt werden
+    public AudioClip testSound1;
+    public AudioClip testSound2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -115,8 +119,21 @@ public class PlayerController : MonoBehaviour
      */
     private void HandleBuildingInput()
     {
+<<<<<<< HEAD
         //Wenn der Spieler ein Gebäude bauen möchte (B-Taste)
         if (Input.GetKeyDown(KeyCode.B))
+=======
+        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea))
+        {
+            map.PlaceObject((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea);
+            isPlacing = false;
+            gameControl.completedBuildings.Add(selectedBuilding);
+
+            // Abspielen eines Testsounds
+            SoundManager.instance.RandomizeSfx(testSound1, testSound2);
+        }
+        else if (isPlacing)
+>>>>>>> Assets
         {
             //Und nicht bereits dabei ist eines zu platzieren
             if (!isPlacing)
