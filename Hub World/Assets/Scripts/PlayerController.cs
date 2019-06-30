@@ -119,21 +119,8 @@ public class PlayerController : MonoBehaviour
      */
     private void HandleBuildingInput()
     {
-<<<<<<< HEAD
         //Wenn der Spieler ein Gebäude bauen möchte (B-Taste)
         if (Input.GetKeyDown(KeyCode.B))
-=======
-        if (Input.GetMouseButtonDown(0) && isPlacing && map.IsPlacable((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea))
-        {
-            map.PlaceObject((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea);
-            isPlacing = false;
-            gameControl.completedBuildings.Add(selectedBuilding);
-
-            // Abspielen eines Testsounds
-            SoundManager.instance.RandomizeSfx(testSound1, testSound2);
-        }
-        else if (isPlacing)
->>>>>>> Assets
         {
             //Und nicht bereits dabei ist eines zu platzieren
             if (!isPlacing)
@@ -163,6 +150,9 @@ public class PlayerController : MonoBehaviour
                 map.PlaceObject((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea);
                 isPlacing = false;
                 gameControl.completedBuildings.Add(selectedBuilding);
+
+                // Abspielen eines Testsounds
+                SoundManager.instance.RandomizeSfx(testSound1, testSound2);
             }
             else
             {
