@@ -14,7 +14,7 @@ namespace Pathfinding
             new Vector3Int(-1, 0, 0),   // West
         };
 
-        // @TODO Sometimes path is missing tiles between some point and the end
+        // @TODO Sometimes last tile is off by 1
         /**
          */
         public List<Vector3Int> FindPath(Tilemap map, Vector3Int start, Vector3Int end) {
@@ -22,25 +22,19 @@ namespace Pathfinding
             List<Node> library = new List<Node>();
             List<Node> done = new List<Node>();
             Node current;
-            IEnumerable<Node> neighbors;
             
             // Init library
             library.Add(new Node(start, default(Vector3Int), 0, graph.GetCell(start).Heuristic));
         
-            while (!IsFinished(library, start, end)) {
+            while (!IsFinished(library, end)) {
                 // Get current best candidate and move it to done
                 current = library.First();
-                done.Add(current);
                 library.RemoveAt(0);
+                done.AddOrUpdateSorted(current);
                 graph.GetCell(current.Position).IsCompleted = true;
 
                 // Get new candidates, insert them
-                neighbors = GetNeighbors(graph, end, library, current);
-                if (neighbors.Count() > 0) 
-                    library.AddRange(neighbors);
-
-                // Sort library (lowest total first, highest last)
-                library.Sort();
+                library.AddOrUpdateRangeSorted(GetNeighbors(graph, end, library, current));
             }
 
             // Library is empty? No way found
@@ -48,13 +42,14 @@ namespace Pathfinding
                 return null;
             }
 
-            Debug.Log("Duplicates in done: " + Utils.HasDuplicates(done) + " | Count in done: " + done.Count);
+            // Add dest to done
+            done.AddOrUpdateSorted(library.First());
 
             // Convert done library to graph path
-            return GetFinalPath(graph, done);
+            return GetFinalPath(graph, done);;
         }
 
-        private bool IsFinished(List<Node> library, Vector3Int start, Vector3Int end) {
+        private bool IsFinished(List<Node> library, Vector3Int end) {
             return library.Count == 0 || library.First().Position == end; 
         }
 
@@ -73,11 +68,8 @@ namespace Pathfinding
         }
 
         private List<Vector3Int> GetFinalPath(Graph graph, List<Node> done) {
-            Node temp = done.ElementAtOrDefault(done.Count - 1);
+            Node temp = done.Find(n => n.Position == graph.End);
             List<Vector3Int> result = new List<Vector3Int>();
-
-            // Add end position to result
-            result.Add(graph.End);
 
             // Element exists?
             if (temp != null) {
