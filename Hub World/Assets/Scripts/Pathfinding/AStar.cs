@@ -15,11 +15,14 @@ namespace Pathfinding
         };
 
         // @TODO Sometimes path is missing tiles between some point and the end
+        /**
+         */
         public List<Vector3Int> FindPath(Tilemap map, Vector3Int start, Vector3Int end) {
             Graph graph = new Graph(map, start, end);
             List<Node> library = new List<Node>();
             List<Node> done = new List<Node>();
             Node current;
+            IEnumerable<Node> neighbors;
             
             // Init library
             library.Add(new Node(start, default(Vector3Int), 0, graph.GetCell(start).Heuristic));
@@ -32,9 +35,17 @@ namespace Pathfinding
                 graph.GetCell(current.Position).IsCompleted = true;
 
                 // Get new candidates, insert them
-                library.AddRange(GetNeighbors(graph, end, library, current));
+                neighbors = GetNeighbors(graph, end, library, current);
+                if (neighbors.Count() > 0) 
+                    library.AddRange(neighbors);
+
                 // Sort library (lowest total first, highest last)
                 library.Sort();
+            }
+
+            // Library is empty? No way found
+            if (library.Count == 0) {
+                return null;
             }
 
             Debug.Log("Duplicates in done: " + Utils.HasDuplicates(done) + " | Count in done: " + done.Count);

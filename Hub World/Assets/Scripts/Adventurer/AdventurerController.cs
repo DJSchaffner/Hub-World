@@ -50,7 +50,9 @@ public class AdventurerController : MonoBehaviour
     public void StartPath(Tilemap map, Vector3Int target)
     {
         newPath = pathFinding.FindPath(map, new Vector3Int((int)transform.position.x, (int)transform.position.y, 0), target);
-        hasPath = true;
+
+        if (newPath != null)
+            hasPath = true;
     }
 
     /**
