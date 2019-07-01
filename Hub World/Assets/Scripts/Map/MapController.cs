@@ -15,7 +15,7 @@ namespace Map{
     public class MapController : MonoBehaviour
     {
         //Anzahl der Tiles in einer Reihe, die zu Beginn gefüllt werden und die Größe der Spielwelt darstellen
-        public const int MAP_SIZE = 100;
+        public const int MAP_SIZE = 150;
 
         //Konstanten für die Spiel-Karte und die Abenteurer-Spawnpoints
         private const int BORDER_WIDTH = 3;
@@ -234,6 +234,25 @@ namespace Map{
                 }
             }
             return true;
+        }
+
+        public bool pathBlocked(List<Vector3Int> path, int xCenter, int yCenter, bool[,] tileArray)
+        {
+            float sizeX = tileArray.GetLength(0);
+            float sizeY = tileArray.GetLength(1);
+            for (int y = 0; y < sizeY; y++)
+            {
+                for (int x = 0; x < sizeX; x++)
+                {
+                    //Wenn die Position mit true markiert ist und im path vorhanden ist
+                    if (tileArray[x, y] && path.Find(v => v.Equals(new Vector3Int((int)(xCenter - sizeX / 2) + x, (int)(yCenter - sizeY / 2) + y, 0))) != null)
+                    {
+                        //path.Contains(new Vector3Int((int)(xCenter - sizeX / 2) + x, (int)(yCenter - sizeY / 2) + y, 0))
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

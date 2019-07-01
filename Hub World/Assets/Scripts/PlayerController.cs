@@ -10,7 +10,7 @@ using Map;
 public class PlayerController : MonoBehaviour
 {
     //Konstanten für die Eigenschaften der Spieler-Kamera
-    private const int MAX_ZOOM_OUT = 28;
+    private const int MAX_ZOOM_OUT = 35;
     private const int MAX_ZOOM_IN = 10;
     private const int CAM_SPEED = 20;
     private const int ZOOM_SPEED = 10;
@@ -149,7 +149,15 @@ public class PlayerController : MonoBehaviour
                 //Wird das Gebäude dort platziert und auf der Tilemap die wichtigen Tiles blockiert
                 map.PlaceObject((int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea);
                 isPlacing = false;
-                gameControl.completedBuildings.Add(selectedBuilding);
+                gameControl.CompletedBuildings.Add(selectedBuilding);
+
+                foreach (AdventurerController adventurer in gameControl.AdventurerPool)
+                {
+                    if (adventurer.NewPath != null && map.pathBlocked(adventurer.NewPath, (int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea));
+                    {
+                        adventurer.StartPath(map.GetMap()[0], adventurer.Target);
+                    }
+                }
 
                 // Abspielen eines Testsounds
                 SoundManager.instance.RandomizeSfx(testSound1, testSound2);

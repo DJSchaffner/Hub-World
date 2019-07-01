@@ -16,7 +16,6 @@ public class GameController : MonoBehaviour
     public static float TILE_SIZE;
     //Anzahl an Adventurern, die maximal gleichzeitig auf der Karte existieren sollen
     private const int ADV_POOL_SIZE = 20;
-
     //GameObject des Grids
     public GameObject MapObject;
     //GameObject des Spielers und seiner Cam
@@ -32,15 +31,15 @@ public class GameController : MonoBehaviour
     public List<BuildingController> Buildings { get; set; }
     //Liste aller Gebäude-Typen, die der Spieler bereits gebaut hat
     //TODO: Eventuell besser ne BuildingController Liste zu machen und hin und her zu adden/removen
-    public List<BuildingTypes> completedBuildings { get; set; }
+    public List<BuildingTypes> CompletedBuildings { get; set; }
+    //Liste aller Controller der Adventurer im ObjectPool
+    public List<AdventurerController> AdventurerPool { get; set; }
 
     //Controller-Komponente des Grids
     private MapController map;
     //Controller-Komponente des Spielers
     private PlayerController player;
 
-    //Liste aller Controller der Adventurer im ObjectPool
-    private List<AdventurerController> adventurerPool;
     //Zeit in Sekunden, in denen ein neuer Abenteurer erscheinen soll
     private int advCoolDown;
     //Timer fürs runterzählen der Gametime
@@ -84,7 +83,7 @@ public class GameController : MonoBehaviour
     private void InitBuildings()
     {
         Buildings = new List<BuildingController>();
-        completedBuildings = new List<BuildingTypes>();
+        CompletedBuildings = new List<BuildingTypes>();
         foreach (GameObject building in BuildingObjects)
         {
             BuildingController bCont = Instantiate(building).GetComponent<BuildingController>();
@@ -101,12 +100,12 @@ public class GameController : MonoBehaviour
      */
     private void InitAdventurers()
     {
-        adventurerPool = new List<AdventurerController>();
+        AdventurerPool = new List<AdventurerController>();
         for (int i = 0; i < ADV_POOL_SIZE; i++)
         {
             GameObject newAdv = Instantiate(Adventurer);
             newAdv.transform.parent = ObjectPool.transform;
-            adventurerPool.Add(newAdv.GetComponent<AdventurerController>());
+            AdventurerPool.Add(newAdv.GetComponent<AdventurerController>());
         }
     }
 
@@ -120,8 +119,8 @@ public class GameController : MonoBehaviour
      */
     private void SpawnAdventurer()
     {
-        AdventurerController newAdv = adventurerPool[0];
-        adventurerPool.Remove(newAdv);
+        AdventurerController newAdv = AdventurerPool[0];
+        AdventurerPool.Remove(newAdv);
 
         newAdv.gameObject.SetActive(true);
         int spawnPointInd = Random.Range(0, map.SpawnPoints.GetLength(1));
@@ -129,7 +128,7 @@ public class GameController : MonoBehaviour
         newAdv.transform.position = (Vector3Int)map.SpawnPoints[spawnSide, spawnPointInd];
 
         //TODO: Immer als erstes die Taverne ansteuern?
-        if (completedBuildings.Contains(BuildingTypes.Tavern))
+        if (CompletedBuildings.Contains(BuildingTypes.Tavern))
         {
             Vector3 target = Buildings[(int)BuildingTypes.Tavern].Entrance.position;
             Vector3Int targetCell = new Vector3Int((int)target.x, (int)target.y, 0);
