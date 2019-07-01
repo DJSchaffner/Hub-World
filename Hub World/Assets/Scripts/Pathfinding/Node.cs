@@ -6,11 +6,11 @@ namespace Pathfinding
   public class Node : IComparable
     {
         public Vector3Int Position { get; set; }
-        public Node Previous       { get; set; }
+        public Vector3Int Previous       { get; set; }
         public float Traveled      { get; set; }
         public float Heuristic     { get; set; }
 
-        public Node (Vector3Int position, Node previous, float traveled, float heuristic) {
+        public Node (Vector3Int position, Vector3Int previous, float traveled, float heuristic) {
             this.Position = position;
             this.Previous = previous;
             this.Traveled = traveled;
