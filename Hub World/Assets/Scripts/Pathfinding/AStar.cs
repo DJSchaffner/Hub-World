@@ -37,12 +37,10 @@ namespace Pathfinding
                 library.Sort();
             }
 
-            // Calculation finished
-            foreach (Node n in done) {
-                result.Add(n.Position);
-            }
+            // Convert done library to graph path
+            result = GetFinalPath(graph, done);
 
-            //Utils.PrintList(result);
+            Utils.PrintList(result);
 
             return result;
         }
@@ -53,7 +51,7 @@ namespace Pathfinding
 
         private IEnumerable<Node> GetNeighbors(Graph graph, Vector3Int end, List<Node> list, Node current) {
             foreach (Vector3Int neighbor in NEIGHBORS) {
-                if (graph.IsInbounds(current.Position + neighbor) && !graph.GetCell(current.Position + neighbor).IsBlocked && !graph.GetCell(current.Position + neighbor).IsCompleted) {
+                if (graph.IsInbounds(current.Position + neighbor) && !graph.GetCell(current.Position + neighbor).IsBlocked && !graph.GetCell(current.Position + neighbor).IsCompleted ) {
                     Node temp;
                     temp = new Node(current.Position + neighbor, current, current.Traveled + 1, graph.GetCell(current.Position + neighbor).Heuristic);
 
@@ -62,6 +60,27 @@ namespace Pathfinding
                     }
                 }                
             }
+        }
+
+        private List<Vector3Int> GetFinalPath(Graph graph, List<Node> done) {
+            Node temp = done.ElementAtOrDefault(done.Count - 1);
+            List<Vector3Int> result = new List<Vector3Int>();
+
+            // Add end position to result
+            result.Add(graph.End);
+
+            // Element exists?
+            if (temp != null) {
+                while (temp.Position != graph.Start) {
+                    result.Add(temp.Position);
+                    temp = temp.Previous;
+                }
+            }
+
+            // Reverse result so list is from start to end
+            result.Reverse();
+
+            return result;
         }
     }   
 }
