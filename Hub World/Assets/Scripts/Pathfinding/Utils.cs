@@ -10,5 +10,18 @@ namespace Pathfinding
                 Debug.Log(element);
             }
         }
+
+        public static bool HasDuplicates(List<Node> list) {
+            List<Vector3Int> positions = new List<Vector3Int>();
+
+            foreach (Node n in list) {
+                if (positions.Contains(n.Position))
+                    return true;
+
+                positions.Add(n.Position);
+            }
+
+            return false;
+        }
     }   
 }

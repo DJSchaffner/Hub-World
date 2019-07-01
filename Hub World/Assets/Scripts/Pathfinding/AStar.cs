@@ -15,7 +15,6 @@ namespace Pathfinding
         };
 
         // @TODO Sometimes path is missing tiles between some point and the end
-        // @TODO Done list seems to contain duplicates
         public List<Vector3Int> FindPath(Tilemap map, Vector3Int start, Vector3Int end) {
             Graph graph = new Graph(map, start, end);
             List<Node> library = new List<Node>();
@@ -38,6 +37,8 @@ namespace Pathfinding
                 library.Sort();
             }
 
+            Debug.Log("Duplicates in done: " + Utils.HasDuplicates(done) + " | Count in done: " + done.Count);
+
             // Convert done library to graph path
             return GetFinalPath(graph, done);
         }
@@ -49,9 +50,9 @@ namespace Pathfinding
         private IEnumerable<Node> GetNeighbors(Graph graph, Vector3Int end, List<Node> list, Node current) {
             foreach (Vector3Int neighbor in NEIGHBORS) {
                 // Neighbor should be in bounds, not be blocked and not be completed yet
-                if (graph.IsInbounds(current.Position + neighbor) && !graph.GetCell(current.Position + neighbor).IsBlocked && !graph.GetCell(current.Position + neighbor).IsCompleted ) {
-                    Node temp;
-                    temp = new Node(current.Position + neighbor, current.Position, current.Traveled + 1, graph.GetCell(current.Position + neighbor).Heuristic);
+                Vector3Int position = current.Position + neighbor;
+                if (graph.IsInbounds(position) && !graph.GetCell(position).IsBlocked && !graph.GetCell(position).IsCompleted ) {
+                    Node temp = new Node(position, current.Position, current.Traveled + 1, graph.GetCell(position).Heuristic);
 
                     if (!list.HasNode(temp)){
                         yield return temp;
