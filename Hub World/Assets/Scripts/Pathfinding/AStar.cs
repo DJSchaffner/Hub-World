@@ -8,10 +8,14 @@ namespace Pathfinding
   public class AStar
     {
         private Vector3Int[] NEIGHBORS = new [] {
-            new Vector3Int(0, 1, 0),   // North
-            new Vector3Int(1, 0, 0),    // East
-            new Vector3Int(0, -1, 0),    // South
-            new Vector3Int(-1, 0, 0),   // West
+            new Vector3Int( 0,  1,  0),   // North
+            new Vector3Int( 1,  1,  0),   // North-East
+            new Vector3Int( 1,  0,  0),   // East
+            new Vector3Int( 1, -1,  0),   // South-East
+            new Vector3Int( 0, -1,  0),   // South
+            new Vector3Int(-1, -1,  0),   // South-West
+            new Vector3Int(-1,  0,  0),   // West
+            new Vector3Int(-1,  1,  0),   // North-West
         };
 
         // @TODO Sometimes last tile is off by 1
@@ -26,14 +30,13 @@ namespace Pathfinding
             Graph graph = new Graph(map, start, end);
             List<Node> library = new List<Node>();
             List<Node> done = new List<Node>();
-            Node current;
             
             // Init library
             library.Add(new Node(start, default(Vector3Int), 0, graph.GetCell(start).Heuristic));
         
             while (!IsFinished(library, end)) {
                 // Get current best candidate and move it to done
-                current = library.First();
+                Node current = library.First();
                 library.RemoveAt(0);
                 done.AddOrUpdateSorted(current);
                 graph.GetCell(current.Position).IsCompleted = true;
@@ -68,8 +71,10 @@ namespace Pathfinding
             foreach (Vector3Int neighbor in NEIGHBORS) {
                 // Neighbor should be in bounds, not be blocked and not be completed yet
                 Vector3Int position = current.Position + neighbor;
+                float distance = Vector3Int.Distance(current.Position, position);
+                
                 if (graph.IsInbounds(position) && !graph.GetCell(position).IsBlocked && !graph.GetCell(position).IsCompleted ) {
-                    Node temp = new Node(position, current.Position, current.Traveled + 1, graph.GetCell(position).Heuristic);
+                    Node temp = new Node(position, current.Position, current.Traveled + distance, graph.GetCell(position).Heuristic);
 
                     if (!list.HasNode(temp)){
                         yield return temp;
@@ -98,6 +103,9 @@ namespace Pathfinding
 
             // Reverse result so list is from start to end
             result.Reverse();
+
+            if (Vector3Int.Distance(graph.End, result.Last()) > 0.5f)
+                Debug.Log("OFF BY 1");
 
             return result;
         }
