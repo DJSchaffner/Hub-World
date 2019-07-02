@@ -15,8 +15,13 @@ namespace Pathfinding
         };
 
         // @TODO Sometimes last tile is off by 1
-        /**
-         */
+        /// <summary>
+        /// Finds the shortest path from start to end ond a given tilemap
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         public List<Vector3Int> FindPath(Tilemap map, Vector3Int start, Vector3Int end) {
             Graph graph = new Graph(map, start, end);
             List<Node> library = new List<Node>();
@@ -49,6 +54,12 @@ namespace Pathfinding
             return GetFinalPath(graph, done);;
         }
 
+        /// <summary>
+        /// Checks if Node library and an end Vector are finished
+        /// </summary>
+        /// <param name="library"></param>
+        /// <param name="end"></param>
+        /// <returns></returns>
         private bool IsFinished(List<Node> library, Vector3Int end) {
             return library.Count == 0 || library.First().Position == end; 
         }
@@ -67,6 +78,12 @@ namespace Pathfinding
             }
         }
 
+        /// <summary>
+        /// Generates the Vector list from a given graph and a completely calculated Node list
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="done"></param>
+        /// <returns></returns>
         private List<Vector3Int> GetFinalPath(Graph graph, List<Node> done) {
             Node temp = done.Find(n => n.Position == graph.End);
             List<Vector3Int> result = new List<Vector3Int>();
