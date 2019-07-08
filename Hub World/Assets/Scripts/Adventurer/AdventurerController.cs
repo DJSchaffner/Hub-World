@@ -30,6 +30,7 @@ public class AdventurerController : MonoBehaviour
     {
         needs = new Adventurer();
         NewPath = new List<Vector3Int>();
+        Target = Vector3Int.zero;
 
         pathFinding = new AStar();
         hasPath = false;
@@ -73,6 +74,9 @@ public class AdventurerController : MonoBehaviour
                 NewPath.Remove(NewPath[0]);
         }
         else
+        {
             hasPath = false;
+            Target = Vector3Int.zero;
+        }
     }
 }

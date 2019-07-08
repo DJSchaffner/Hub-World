@@ -153,8 +153,8 @@ public class PlayerController : MonoBehaviour
 
                 foreach (AdventurerController adventurer in gameControl.AdventurerPool)
                 {
-                    if (adventurer.NewPath != null && map.pathBlocked(adventurer.NewPath, (int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea));
-                    {
+                    if (adventurer.Target != Vector3Int.zero && map.pathBlocked(adventurer.NewPath, (int)placingPos.x, (int)placingPos.y, gameControl.Buildings[(int)selectedBuilding].BuildArea))
+                    { 
                         adventurer.StartPath(map.GetMap()[0], adventurer.Target);
                     }
                 }
